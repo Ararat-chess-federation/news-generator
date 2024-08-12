@@ -1,10 +1,10 @@
-import { IPlayer } from "../../models/player.js";
+import { IPlayer, IPrizes } from "../../models/player.js";
 
 interface IFinalTextProps {
   selectedPlace: string;
   selectedTournament: string;
   players: IPlayer[];
-  prizes: { girl: IPlayer; third: IPlayer; second: IPlayer; first: IPlayer };
+  prizes: IPrizes;
 }
 
 export default function FinalText({

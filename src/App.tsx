@@ -1,23 +1,27 @@
 import { ChangeEvent, useState } from "react";
 import FinalText from "./components/finalText/FinalText.js";
-import Prizer from "./components/prizer/Prizer.js";
 import Select from "./components/select/Select.js";
 import CategoryPlayers from "./components/tournament/Tournament.js";
 import { defaultPlayer, defaultPrizes, prizers } from "./constants/players.js";
 import { places, tournaments } from "./constants/selectOptions.js";
-import { IPlayer } from "./models/player.js";
+import { IPlayer, IPrizes } from "./models/player.js";
 import "./App.css";
+import PrizersList from "./components/prizer/PrizersList.js";
 
 function App() {
-  const [selectedPlace, setSelectedPlace] = useState<string>(places[0]);
-  const [selectedTournament, setSelectedTournament] = useState<string>(
-    tournaments[0]
-  );
+  const [selectedPlace, setSelectedPlace] = useState(places[0]);
+  const [selectedTournament, setSelectedTournament] = useState(tournaments[0]);
   const [players, setPlayers] = useState<IPlayer[]>([]);
-  const [prizes, setPrizes] = useState(defaultPrizes);
+  const [prizes, setPrizes] = useState<IPrizes>(defaultPrizes);
 
   const addInputField = () => {
     setPlayers([...players, { ...defaultPlayer }]);
+  };
+
+  const removeInputField = (index: number) => {
+    const newInputFields = players.filter((_, idx) => idx !== index);
+
+    setPlayers(newInputFields);
   };
 
   const handleInputChange = (
@@ -27,12 +31,6 @@ function App() {
   ) => {
     const newInputFields = [...players];
     newInputFields[idx][name] = e.target.value;
-    setPlayers(newInputFields);
-  };
-
-  const removeInputField = (index: number) => {
-    const newInputFields = players.filter((_, idx) => idx !== index);
-
     setPlayers(newInputFields);
   };
 
@@ -63,13 +61,7 @@ function App() {
           removeInputField={removeInputField}
         />
       </div>
-      <div>
-        <Prizer text={prizers.girl} setPrizes={setPrizes} place="girl" />
-        <p>Մրցանակային տեղ գրաված շախմատիստներն են՝ </p>
-        <Prizer text={prizers.third} setPrizes={setPrizes} place="third" />
-        <Prizer text={prizers.second} setPrizes={setPrizes} place="second" />
-        <Prizer text={prizers.winner} setPrizes={setPrizes} place="first" />
-      </div>
+      <PrizersList prizers={prizers} setPrizes={setPrizes} />
       <hr />
       <FinalText
         selectedPlace={selectedPlace}
