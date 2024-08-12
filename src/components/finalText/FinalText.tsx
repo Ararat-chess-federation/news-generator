@@ -14,42 +14,29 @@ export default function FinalText({
   players,
   prizes,
 }: IFinalTextProps) {
+  const generateText = () => {
+    return `
+      ${selectedPlace} ավարտվեց ${selectedTournament} մրցաշարը։ Կարգեր լրացրած
+      մասնակիցներն են՝ \n
+      ${players.map((el) => `${el.player}, մարզիչ՝ ${el.trainer}`).join("\n")}
+  
+      Լավագույն աղջիկ՝ ${prizes.girl.player} (մարզիչ՝ ${prizes.girl.trainer})\n
+      3 - ${prizes.third.player} (մարզիչ՝ ${prizes.third.trainer})\n
+      2 - ${prizes.second.player} (մարզիչ՝ ${prizes.second.trainer})\n
+      1 - ${prizes.first.player} (մարզիչ՝ ${prizes.first.trainer})\n
+    `;
+  };
+
   return (
     <div className="final_container">
       <button
         onClick={() => {
-          navigator.clipboard.writeText("text");
+          navigator.clipboard.writeText(generateText());
         }}
       >
         COPY
       </button>
-      <div>
-        {selectedPlace} ավարտվեց {selectedTournament} մրցաշարը։ Կարգեր լրացրած
-        մասնակիցներն են՝
-        {players.map(
-          (el, idx) =>
-            el.player && (
-              <div key={idx}>
-                {" "}
-                <span>{el.player}</span>, մարզիչ՝ <span>{el.trainer}</span>{" "}
-              </div>
-            )
-        )}
-      </div>
-      <div>
-        <p>
-          Լավագույն աղջիկ՝ {prizes.girl.player} (մարզիչ՝ {prizes.girl.trainer})
-        </p>
-        <p>
-          3 - {prizes.third.player} (մարզիչ՝ {prizes.third.trainer})
-        </p>
-        <p>
-          2 - {prizes.second.player} (մարզիչ՝ {prizes.second.trainer})
-        </p>
-        <p>
-          1 - {prizes.first.player} (մարզիչ՝ {prizes.first.trainer})
-        </p>
-      </div>
+      {generateText()}
     </div>
   );
 }
