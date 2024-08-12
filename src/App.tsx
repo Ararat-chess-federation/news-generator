@@ -1,42 +1,18 @@
 import { ChangeEvent, useState } from "react";
-import "./App.css";
+import FinalText from "./components/finalText/FinalText.js";
 import Prizer from "./components/prizer/Prizer.js";
 import Select from "./components/select/Select.js";
 import CategoryPlayers from "./components/tournament/Tournament.js";
-
-const places = [
-  "Արտաշատ քաղաքում",
-  "Մասիս քաղաքում",
-  "Վեդի քաղաքում",
-  "Հայաստանի շախմատի ակադեմիայում",
-  "Տիգրան Պետրոսյանի անվան շախմատի տուն մարզադպրոցում",
-];
-
-const tournaments = ["1-ին կարգի մրցաշար", "2", "3", "4"];
-
-export const defaultPlayer: IPlayer = { player: "", trainer: "" };
-export interface IPlayer {
-  player: string;
-  trainer: string;
-}
-
-export const prizers = {
-  third: "3-րդ տեղ՝",
-  second: "2-րդ տեղ՝",
-  winner: "Մրցաշարի հաղթող դարձավ",
-  girl: "Լավագույն աղջիկ ճանաչվեց",
-};
-
-export const defaultPrizes = {
-  first: { ...defaultPlayer },
-  second: { ...defaultPlayer },
-  third: { ...defaultPlayer },
-  girl: { ...defaultPlayer },
-};
+import { defaultPlayer, defaultPrizes, prizers } from "./constants/players.js";
+import { places, tournaments } from "./constants/selectOptions.js";
+import { IPlayer } from "./models/player.js";
+import "./App.css";
 
 function App() {
-  const [selectedPlace, setSelectedPlace] = useState<string>("");
-  const [selectedTournament, setSelectedTournament] = useState<string>("");
+  const [selectedPlace, setSelectedPlace] = useState<string>(places[0]);
+  const [selectedTournament, setSelectedTournament] = useState<string>(
+    tournaments[0]
+  );
   const [players, setPlayers] = useState<IPlayer[]>([]);
   const [prizes, setPrizes] = useState(defaultPrizes);
 
@@ -95,27 +71,12 @@ function App() {
         <Prizer text={prizers.winner} setPrizes={setPrizes} place="first" />
       </div>
       <hr />
-      <div>
-        <div>
-          {selectedPlace} ավարտվեց {selectedTournament} մրցաշարը։ Կարգեր լրացրած
-          մասնակիցներն են՝
-          {players.map(
-            (el, idx) =>
-              el.player && (
-                <div key={idx}>
-                  {" "}
-                  <span>{el.player}</span>, մարզիչ՝ <span>{el.trainer}</span>{" "}
-                </div>
-              )
-          )}
-        </div>
-        <div>
-          <p>Լավագույն աղջիկ՝ {prizes.girl.player} (մարզիչ՝ {prizes.girl.trainer})</p>
-          <p>3 - {prizes.third.player} (մարզիչ՝ {prizes.third.trainer})</p>
-          <p>2 - {prizes.second.player} (մարզիչ՝ {prizes.second.trainer})</p>
-          <p>1 - {prizes.first.player} (մարզիչ՝ {prizes.first.trainer})</p>
-        </div>
-      </div>
+      <FinalText
+        selectedPlace={selectedPlace}
+        selectedTournament={selectedTournament}
+        players={players}
+        prizes={prizes}
+      />
     </div>
   );
 }

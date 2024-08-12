@@ -47,7 +47,7 @@ export default function Select({
       </div>
       <select
         id="location-select"
-        value={selectedOption || "Other"}
+        value={selectedOption || values[0]}
         onChange={handleSelectChange}
       >
         {values.map((el, index) => (
