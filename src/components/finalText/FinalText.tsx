@@ -1,4 +1,5 @@
 import { IPlayer, IPrizes } from "../../models/player.js";
+import "./FinalText.css";
 
 interface IFinalTextProps {
   selectedPlace: string;
@@ -14,7 +15,14 @@ export default function FinalText({
   prizes,
 }: IFinalTextProps) {
   return (
-    <div>
+    <div className="final_container">
+      <button
+        onClick={() => {
+          navigator.clipboard.writeText("text");
+        }}
+      >
+        COPY
+      </button>
       <div>
         {selectedPlace} ավարտվեց {selectedTournament} մրցաշարը։ Կարգեր լրացրած
         մասնակիցներն են՝

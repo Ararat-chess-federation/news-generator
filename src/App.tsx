@@ -5,8 +5,8 @@ import CategoryPlayers from "./components/tournament/Tournament.js";
 import { defaultPlayer, defaultPrizes, prizers } from "./constants/players.js";
 import { places, tournaments } from "./constants/selectOptions.js";
 import { IPlayer, IPrizes } from "./models/player.js";
-import "./App.css";
 import PrizersList from "./components/prizer/PrizersList.js";
+import "./App.css"
 
 function App() {
   const [selectedPlace, setSelectedPlace] = useState(places[0]);
@@ -35,7 +35,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="container">
       <div>
         <Select
           selectedOption={selectedPlace}
