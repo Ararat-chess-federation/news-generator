@@ -62,7 +62,6 @@ function App() {
         />
       </div>
       <PrizersList prizers={prizers} setPrizes={setPrizes} />
-      <hr />
       <FinalText
         selectedPlace={selectedPlace}
         selectedTournament={selectedTournament}
