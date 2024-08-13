@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
-import { IPrizes } from "../../models/player.js";
-import Prizer from "./Prizer.js";
+import { IPrizes } from "../../models/player";
+import Prizer from "./Prizer";
 
 interface IPrizersListProps {
   prizers: { girl: string; third: string; second: string; winner: string };

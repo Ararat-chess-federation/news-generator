@@ -1,4 +1,4 @@
-import { IPlayer } from "../models/player.js";
+import { IPlayer } from "../models/player";
 
 export const defaultPlayer: IPlayer = { player: "", trainer: "" };
 

@@ -1,11 +1,11 @@
 import { ChangeEvent, useState } from "react";
-import FinalText from "./components/finalText/FinalText.js";
-import Select from "./components/select/Select.js";
-import CategoryPlayers from "./components/tournament/Tournament.js";
-import { defaultPlayer, defaultPrizes, prizers } from "./constants/players.js";
-import { places, tournaments } from "./constants/selectOptions.js";
-import { IPlayer, IPrizes } from "./models/player.js";
-import PrizersList from "./components/prizer/PrizersList.js";
+import FinalText from "./components/finalText/FinalText";
+import Select from "./components/select/Select";
+import CategoryPlayers from "./components/tournament/Tournament";
+import { defaultPlayer, defaultPrizes, prizers } from "./constants/players";
+import { places, tournaments } from "./constants/selectOptions";
+import { IPlayer, IPrizes } from "./models/player";
+import PrizersList from "./components/prizer/PrizersList";
 import "./App.css"
 
 function App() {

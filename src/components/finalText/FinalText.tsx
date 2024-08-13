@@ -1,4 +1,4 @@
-import { IPlayer, IPrizes } from "../../models/player.js";
+import { IPlayer, IPrizes } from "../../models/player";
 import "./FinalText.css";
 
 interface IFinalTextProps {
