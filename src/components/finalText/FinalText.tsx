@@ -29,13 +29,15 @@ export default function FinalText({
 
   return (
     <div className="final_container">
-      <button
-        onClick={() => {
-          navigator.clipboard.writeText(generateText());
-        }}
-      >
-        COPY
-      </button>
+      <div>
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText(generateText());
+          }}
+        >
+          📄
+        </button>
+      </div>
       {generateText()}
     </div>
   );
