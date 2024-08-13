@@ -7,25 +7,29 @@ interface ISelectProps {
   title: string;
 }
 
+const OTHER = "Այլ";
+
 export default function Select({
   values,
   selectedOption,
   setSelectedOption,
   title,
 }: ISelectProps) {
-  const [showInput, setShowInput] = useState<boolean>(false);
-  const [otherValue, setOtherValue] = useState<string>("");
+  const [showInput, setShowInput] = useState(false);
+  const [otherValue, setOtherValue] = useState("");
 
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    if (value === "Other") {
+    if (value === OTHER) {
       setShowInput(true);
       setSelectedOption("");
-    } else {
-      setShowInput(false);
-      setSelectedOption(value);
-      setOtherValue("");
+
+      return;
     }
+
+    setShowInput(false);
+    setSelectedOption(value);
+    setOtherValue("");
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +47,7 @@ export default function Select({
   return (
     <div>
       <div>
-        <label htmlFor="location-select">{title}</label>
+        <label>{title}</label>
       </div>
       <select
         id="location-select"
@@ -55,7 +59,7 @@ export default function Select({
             {el}
           </option>
         ))}
-        <option value="Other">Other</option>
+        <option value={OTHER}>{OTHER}</option>
       </select>
 
       {showInput && (
