@@ -1,13 +1,12 @@
 export default function CategoryPlayers({
-  category,
   players,
   handleInputChange,
   removeInputField,
   addInputField,
 }: any) {
   return (
-    <section>
-      <label>{category}</label>
+    <section style={{ marginTop: "16px" }}>
+      <label>Կարգ լրացրած մասնակիցներ</label>
 
       {players.map((_: any, idx: any) => (
         <InputField

@@ -6,7 +6,7 @@ import { defaultPlayer, defaultPrizes, prizers } from "./constants/players";
 import { places, tournaments } from "./constants/selectOptions";
 import { IPlayer, IPrizes } from "./models/player";
 import PrizersList from "./components/prizer/PrizersList";
-import "./App.css"
+import "./App.css";
 
 function App() {
   const [selectedPlace, setSelectedPlace] = useState(places[0]);
@@ -55,7 +55,6 @@ function App() {
       <div>
         <CategoryPlayers
           addInputField={addInputField}
-          category={selectedTournament}
           handleInputChange={handleInputChange}
           players={players}
           removeInputField={removeInputField}

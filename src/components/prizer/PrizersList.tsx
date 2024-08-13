@@ -9,9 +9,8 @@ interface IPrizersListProps {
 
 export default function PrizersList({ prizers, setPrizes }: IPrizersListProps) {
   return (
-    <div>
+    <div style={{ marginTop: "16px" }}>
       <Prizer text={prizers.girl} setPrizes={setPrizes} place="girl" />
-      <p>Մրցանակային տեղ գրաված շախմատիստներն են՝ </p>
       <Prizer text={prizers.third} setPrizes={setPrizes} place="third" />
       <Prizer text={prizers.second} setPrizes={setPrizes} place="second" />
       <Prizer text={prizers.winner} setPrizes={setPrizes} place="first" />

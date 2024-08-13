@@ -45,7 +45,7 @@ export default function Select({
   };
 
   return (
-    <div>
+    <div style={{ marginTop: "16px" }}>
       <div>
         <label>{title}</label>
       </div>

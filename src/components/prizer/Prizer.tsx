@@ -13,10 +13,9 @@ export interface IPrizerProps {
   place: "first" | "second" | "third" | "girl";
 }
 
-
 export default function Prizer({ text, setPrizes, place }: IPrizerProps) {
   return (
-    <div>
+    <div style={{ marginTop: "8px" }}>
       <label>{text} </label>
       <input
         onChange={(e) =>
