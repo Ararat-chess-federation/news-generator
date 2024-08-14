@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  news-generator:
+    image: news-generator
+    build: ./
+    container_name: news-generator
+    restart: always 
+    ports:
+        - 3003:80   
