@@ -1,12 +1,18 @@
+"use client";
+
 import { ChangeEvent, useState } from "react";
-import FinalText from "./components/finalText/FinalText";
-import Select from "./components/select/Select";
-import CategoryPlayers from "./components/tournament/Tournament";
-import { defaultPlayer, defaultPrizes, prizers } from "./constants/players";
-import { places, tournaments } from "./constants/selectOptions";
-import { IPlayer, IPrizes } from "./models/player";
-import PrizersList from "./components/prizer/PrizersList";
-import "./App.css";
+import FinalText from "../src/components/finalText/FinalText";
+import PrizersList from "../src/components/prizer/PrizersList";
+import Select from "../src/components/select/Select";
+import CategoryPlayers from "../src/components/tournament/Tournament";
+import {
+  defaultPlayer,
+  defaultPrizes,
+  prizers,
+} from "../src/constants/players";
+import { places, tournaments } from "../src/constants/selectOptions";
+import { IPlayer, IPrizes } from "../src/models/player";
+import "./page.css";
 
 function App() {
   const [selectedPlace, setSelectedPlace] = useState(places[0]);
