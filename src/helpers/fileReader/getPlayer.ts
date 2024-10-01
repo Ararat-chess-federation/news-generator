@@ -1,3 +1,4 @@
+import { IPlayer } from "../../models/player";
 import modifyName from "./modifyName";
 
 enum EValuesKeys {
@@ -7,11 +8,11 @@ enum EValuesKeys {
   points = "_6",
 }
 
-function getPlayer(data: { [key: string]: string }) {
+function getPlayer(data: { [key: string]: string }):IPlayer {
   return {
-    prize: data[EValuesKeys.place],
     player: modifyName(data[EValuesKeys.name]),
     trainer: data[EValuesKeys.trainer].split("/").pop() as string,
+    prize: data[EValuesKeys.place],
     points: data[EValuesKeys.points],
   };
 }

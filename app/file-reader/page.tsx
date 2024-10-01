@@ -2,12 +2,23 @@
 
 import { ChangeEvent, useState } from "react";
 import * as XLSX from "xlsx";
+import FinalText from "../../src/components/finalText/FinalText";
+import { defaultPrizes } from "../../src/constants/players";
 import getPrizersByJSON from "../../src/helpers/fileReader/getPlayer";
 import generateFinalText from "../../src/helpers/generateFinalText";
+import { IPlayer } from "../../src/models/player";
 
 export default function ExcelReader() {
-  const [data, setData] = useState("");
-  const [players, setPlayer] = useState({});
+  const [data, setData] = useState<{
+    first: IPlayer;
+    second: IPlayer;
+    third: IPlayer;
+    girl: {
+      player: string;
+      trainer: string;
+    };
+    prizers: IPlayer[];
+  }>({ ...defaultPrizes, prizers: [] });
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event?.target?.files?.[0];
@@ -32,7 +43,7 @@ export default function ExcelReader() {
         third,
         girl: first,
       });
-      setData(text);
+      setData(players);
     };
 
     reader.readAsBinaryString(file as File);
@@ -41,7 +52,17 @@ export default function ExcelReader() {
   return (
     <div>
       <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} />
-      <p>{data}</p>
+      <FinalText
+        players={data?.prizers as IPlayer[]}
+        selectedPlace="s"
+        selectedTournament="t"
+        prizes={{
+          first: data?.first as IPlayer,
+          second: data?.second as IPlayer,
+          third: data?.third as IPlayer,
+          girl: data?.girl as IPlayer,
+        }}
+      />
     </div>
   );
 }
