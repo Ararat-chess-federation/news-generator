@@ -8,7 +8,7 @@ export default function Header() {
       <nav>
         <ul className={styles.nav_list}>
           {navigation.map((el) => (
-            <li className={styles.nav_item}>
+            <li key={el.link} className={styles.nav_item}>
               <Link href={el.link}>{el.title}</Link>
             </li>
           ))}
