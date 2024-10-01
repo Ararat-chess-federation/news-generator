@@ -13,7 +13,7 @@ import {
 import { places, tournaments } from "../../src/constants/selectOptions";
 import { IPlayer, IPrizes } from "../../src/models/player";
 
-function App() {
+function Conclusion() {
   const [selectedPlace, setSelectedPlace] = useState(places[0]);
   const [selectedTournament, setSelectedTournament] = useState(tournaments[0]);
   const [players, setPlayers] = useState<IPlayer[]>([]);
@@ -76,4 +76,4 @@ function App() {
   );
 }
 
-export default App;
+export default Conclusion;
