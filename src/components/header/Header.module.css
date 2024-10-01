@@ -1,0 +1,17 @@
+.nav_list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 32px;
+}
+
+.nav_item{
+    list-style-type: none;
+    padding: 8px;
+}
+
+@media (max-width: 769px) {
+  .nav_list {
+    display: block;
+  }
+}

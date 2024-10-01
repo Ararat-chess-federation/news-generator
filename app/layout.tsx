@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import "./layout.css"
+import Header from "../src/components/header/Header";
+import "./layout.css";
 
 export const metadata: Metadata = {
   title: "Նորությունների գեներատոր | Արարատի մարզի շախմատի ֆեդերացիա",
@@ -13,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }
