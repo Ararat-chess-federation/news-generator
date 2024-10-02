@@ -1,14 +1,26 @@
 import { IPlayer } from "../../models/player";
 import modifyName from "./modifyName";
 
-enum EValuesKeys {
+export enum EValuesKeys {
   place = "Из турнирной базы данных Chess-Results http://chess-results.com",
   name = "_2",
   trainer = "_5",
   points = "_6",
 }
 
-function getPlayer(data: { [key: string]: string }):IPlayer {
+export function getTournamentInfo(data: { [key: string]: string }[]) {
+  const placeAndTournament: any = data[0];
+  const finalTable = data.slice(4);
+  let [tournament, place] = placeAndTournament[EValuesKeys.place].split(",");
+
+  if (tournament.endsWith("մրցաշար")) {
+    tournament = tournament.slice(0, tournament.lastIndexOf("մրցաշար")).trim();
+  }
+
+  return { tournament, place, finalTable };
+}
+
+function getPlayer(data: { [key: string]: string }): IPlayer {
   return {
     player: modifyName(data[EValuesKeys.name]),
     trainer: data[EValuesKeys.trainer].split("/").pop() as string,
@@ -17,9 +29,7 @@ function getPlayer(data: { [key: string]: string }):IPlayer {
   };
 }
 
-export default function getPrizersByJSON(
-  jsonData: { [key: string]: string }[]
-) {
+export function getPrizersByJSON(jsonData: { [key: string]: string }[]) {
   const prizers = [];
 
   const first = getPlayer(jsonData[0]);
