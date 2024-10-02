@@ -13,6 +13,7 @@ export function getTournamentInfo(data: { [key: string]: string }[]) {
   const finalTable = data.slice(4);
   let [tournament, place] = placeAndTournament[EValuesKeys.place].split(",");
 
+  place += "քաղաքում"
   if (tournament.endsWith("մրցաշար")) {
     tournament = tournament.slice(0, tournament.lastIndexOf("մրցաշար")).trim();
   }
