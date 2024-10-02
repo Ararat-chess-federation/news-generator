@@ -1,9 +1,9 @@
 import { ChangeEvent, Dispatch, useState } from "react";
 
 interface ISelectProps {
-  values: string[];
-  selectedOption: string;
-  setSelectedOption: Dispatch<React.SetStateAction<string>>;
+  values: string[] | number[];
+  selectedOption: string | number;
+  setSelectedOption: Dispatch<React.SetStateAction<string>> | Function;
   title: string;
 }
 
