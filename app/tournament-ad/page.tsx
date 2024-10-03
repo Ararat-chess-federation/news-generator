@@ -26,6 +26,7 @@ function TournamentAd() {
   useEffect(() => {
     const month = localStorage.getItem("month") || months[0];
     setSelectedMonths(Array(10).fill(month));
+    setDeadLineMonth(month)
   }, []);
 
   const handleMonthChange = (index: number, value: string) => {
