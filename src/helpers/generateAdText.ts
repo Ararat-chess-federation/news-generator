@@ -66,7 +66,7 @@ function generateSchedule(
 }
 
 function generateDeadLine(deadLineMonth: string, deadLineDay: string) {
-  return `Գրանցման վերջնաժամկետն է՝ ${deadLineMonth} ${deadLineDay} ժամը 18:00։`;
+  return `Գրանցման վերջնաժամկետն է՝ ${deadLineMonth}ի ${deadLineDay} ժամը 18:00։`;
 }
 
 function generateNumber(phoneNumber: string) {
