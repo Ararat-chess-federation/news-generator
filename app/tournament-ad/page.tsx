@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import AdText from "../../src/components/adText/AdText";
 import Select from "../../src/components/select/Select";
 import {
   days,
@@ -37,31 +38,6 @@ function TournamentAd() {
     const newTimes = [...selectedTimes];
     newTimes[index] = value;
     setSelectedTimes(newTimes);
-  };
-
-  const generateFinalText = () => {
-    const days = selectedDays.slice(0, selectedDays.indexOf("0"));
-    const startDate = `${selectedMonths[0]}ի ${selectedDays[0]}-ից`;
-    const endDate = `${selectedMonths[days.length - 1]}ի ${
-      selectedDays[days.length - 1]
-    }-ը`;
-
-    const term = `${
-      startDate.charAt(0).toUpperCase() + startDate.slice(1)
-    } ${endDate}`;
-
-    const intro = `${term} ${selectedPlace} տեղի կունենա ${selectedTournament} որակավորման մրցաշար հետևյալ ժամանակացույցով՝\n`;
-    const schedule = days.reduce((acc, val, idx) => {
-      return (
-        acc +
-        `- Տուր ${idx + 1}՝ ${selectedMonths[idx]}ի ${selectedDays[idx]} ժամը ${
-          selectedTimes[idx]
-        }\n`
-      );
-    }, "");
-    const deadline = `Գրանցման վերջնաժամկետն է՝ ${deadLineMonth} ${deadLineDay} ժամը 18:00։`;
-    const number = `Գրանցվելու համար զանգահարել ${phoneNumber} հեռախոսահամարով`;
-    return intro + schedule + deadline + number;
   };
 
   return (
@@ -120,7 +96,16 @@ function TournamentAd() {
         title="Օր"
       />
       <input type="text" onChange={(e) => setPhoneNumber(e.target.value)} />
-      <div>{generateFinalText()}</div>
+      <AdText
+        selectedPlace={selectedPlace}
+        selectedTournament={selectedTournament}
+        selectedMonths={selectedMonths}
+        selectedDays={selectedDays}
+        selectedTimes={selectedTimes}
+        deadLineMonth={deadLineMonth}
+        deadLineDay={deadLineDay}
+        phoneNumber={phoneNumber}
+      />
     </div>
   );
 }
