@@ -18,3 +18,16 @@
   align-items: center;
   column-gap: 20px;
 }
+
+.deadline_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.phone_number_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

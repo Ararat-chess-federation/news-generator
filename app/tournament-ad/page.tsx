@@ -96,19 +96,27 @@ function TournamentAd() {
         ))}
       </div>
       <h2>Գրանցման Վերջնաժամկետ</h2>
-      <Select
-        selectedOption={deadLineMonth}
-        setSelectedOption={(value: string) => setDeadLineMonth(value)}
-        values={months}
-        title="Ամիս"
-      />
-      <Select
-        selectedOption={deadLineDay}
-        setSelectedOption={(value: string) => setDeadLineDay(value)}
-        values={days}
-        title="Օր"
-      />
-      <input type="text" onChange={(e) => setPhoneNumber(e.target.value)} />
+      <div className="deadline_container">
+        <Select
+          selectedOption={deadLineMonth}
+          setSelectedOption={(value: string) => setDeadLineMonth(value)}
+          values={months}
+          title="Ամիս"
+        />
+        <Select
+          selectedOption={deadLineDay}
+          setSelectedOption={(value: string) => setDeadLineDay(value)}
+          values={days}
+          title="Օր"
+        />
+        <div>
+          <div style={{ marginTop: "16px" }}>
+            <label>Հեռախոսահամար</label>
+          </div>
+          <input type="text" onChange={(e) => setPhoneNumber(e.target.value)} />
+        </div>
+      </div>
+
       <AdText
         selectedPlace={selectedPlace}
         selectedTournament={selectedTournament}
