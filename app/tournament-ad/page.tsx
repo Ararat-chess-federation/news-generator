@@ -9,6 +9,7 @@ import {
   places,
   tournaments,
 } from "../../src/constants/selectOptions";
+import "./TournamentAd.css";
 
 function TournamentAd() {
   const [selectedPlace, setSelectedPlace] = useState(places[0]);
@@ -42,22 +43,24 @@ function TournamentAd() {
 
   return (
     <div className="container">
-      <div>
-        <Select
-          selectedOption={selectedPlace}
-          setSelectedOption={setSelectedPlace}
-          values={places}
-          title="Վայր"
-        />
-      </div>
-      <div>
-        <Select
-          selectedOption={selectedTournament}
-          setSelectedOption={setSelectedTournament}
-          values={tournaments}
-          title="Մրցաշար"
-        />
-      </div>
+      <section className="ad_intro">
+        <div>
+          <Select
+            selectedOption={selectedPlace}
+            setSelectedOption={setSelectedPlace}
+            values={places}
+            title="Վայր"
+          />
+        </div>
+        <div>
+          <Select
+            selectedOption={selectedTournament}
+            setSelectedOption={setSelectedTournament}
+            values={tournaments}
+            title="Մրցաշար"
+          />
+        </div>
+      </section>
       {[...Array(10)].map((_, i) => (
         <div style={{ display: "flex", alignItems: "center" }} key={i}>
           Տուր {i + 1}
