@@ -26,8 +26,8 @@ export default function generateAdText(
 
   const deadline = generateDeadLine(deadLineMonth, deadLineDay);
   const number = generateNumber(phoneNumber);
-  
-  return `${intro}\n ${schedule}\n ${deadline}\n ${number}`;
+
+  return `${intro}\n${schedule}\n ${deadline}\n ${number}`;
 }
 
 function generateIntro(
@@ -46,7 +46,7 @@ function generateIntro(
     startDate.charAt(0).toUpperCase() + startDate.slice(1)
   } ${endDate}`;
 
-  return `${term} ${selectedPlace} տեղի կունենա ${selectedTournament} որակավորման մրցաշար հետևյալ ժամանակացույցով՝\n`;
+  return `${term} ${selectedPlace} տեղի կունենա ${selectedTournament} որակավորման մրցաշար հետևյալ ժամանակացույցով՝`;
 }
 
 function generateSchedule(
