@@ -33,12 +33,22 @@ function TournamentAd() {
     newMonths.fill(value, index);
 
     localStorage.setItem("month", value);
+
+    if (index === 0) {
+      setDeadLineMonth(value);
+    }
+
     setSelectedMonths(newMonths);
   };
 
   const handleDayChange = (index: number, value: string) => {
     const newDays = [...selectedDays];
     newDays[index] = value;
+
+    if (index === 0) {
+      setDeadLineDay(value);
+    }
+
     setSelectedDays(newDays);
   };
 
