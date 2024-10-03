@@ -61,30 +61,37 @@ function TournamentAd() {
           />
         </div>
       </section>
-      {[...Array(10)].map((_, i) => (
-        <div style={{ display: "flex", alignItems: "center" }} key={i}>
-          Տուր {i + 1}
-          <Select
-            selectedOption={selectedMonths[i]}
-            setSelectedOption={(value: string) => handleMonthChange(i, value)}
-            values={months}
-            title="Ամիս"
-          />
-          <Select
-            selectedOption={selectedDays[i]}
-            setSelectedOption={(value: string) => handleDayChange(i, value)}
-            values={days}
-            title="Օր"
-          />
-          Ժամ
-          <input
-            type="time"
-            value={selectedTimes[i]}
-            onChange={(e) => handleTimeChange(i, e.target.value)}
-            style={{ marginLeft: "10px" }}
-          />
-        </div>
-      ))}
+      <div className="schedule_container">
+        {[...Array(10)].map((_, i) => (
+          <div key={i}>
+            <p>Տուր {i + 1}</p>
+            <div className="round_container">
+              <Select
+                selectedOption={selectedMonths[i]}
+                setSelectedOption={(value: string) =>
+                  handleMonthChange(i, value)
+                }
+                values={months}
+                title="Ամիս"
+              />
+              <Select
+                selectedOption={selectedDays[i]}
+                setSelectedOption={(value: string) => handleDayChange(i, value)}
+                values={days}
+                title="Օր"
+              />
+              <div style={{ marginTop: "16px" }}>
+                <div>Ժամ</div>
+                <input
+                  type="time"
+                  value={selectedTimes[i]}
+                  onChange={(e) => handleTimeChange(i, e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
       Գրանցման Վերջնաժամկետ
       <Select
         selectedOption={deadLineMonth}

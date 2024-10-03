@@ -5,3 +5,16 @@
   flex-wrap: wrap;
   column-gap: 40px;
 }
+
+.schedule_container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.round_container {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+}
