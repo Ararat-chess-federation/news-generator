@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdText from "../../src/components/adText/AdText";
 import Select from "../../src/components/select/Select";
 import {
@@ -23,9 +23,16 @@ function TournamentAd() {
   const [deadLineDay, setDeadLineDay] = useState(days[0]);
   const [phoneNumber, setPhoneNumber] = useState("");
 
+  useEffect(() => {
+    const month = localStorage.getItem("month") || months[0];
+    setSelectedMonths(Array(10).fill(month));
+  }, []);
+
   const handleMonthChange = (index: number, value: string) => {
     const newMonths = [...selectedMonths];
-    newMonths[index] = value;
+    newMonths.fill(value, index);
+
+    localStorage.setItem("month", value);
     setSelectedMonths(newMonths);
   };
 
