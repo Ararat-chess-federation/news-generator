@@ -46,7 +46,7 @@ function generateIntro(
     startDate.charAt(0).toUpperCase() + startDate.slice(1)
   } ${endDate}`;
 
-  return `${term} ${selectedPlace} տեղի կունենա ${selectedTournament} որակավորման մրցաշար հետևյալ ժամանակացույցով՝`;
+  return `${term} ${selectedPlace} տեղի կունենա ${selectedTournament} մրցաշար հետևյալ ժամանակացույցով՝`;
 }
 
 function generateSchedule(
