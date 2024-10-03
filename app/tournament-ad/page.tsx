@@ -43,6 +43,7 @@ function TournamentAd() {
 
   return (
     <div className="container">
+      <h2>Վայր և մրցաշար</h2>
       <section className="ad_intro">
         <div>
           <Select
@@ -61,6 +62,8 @@ function TournamentAd() {
           />
         </div>
       </section>
+      <h2>Տուրեր</h2>
+      <p>*Ավելորդ դաշտերը թողնել անփոփոխ</p>
       <div className="schedule_container">
         {[...Array(10)].map((_, i) => (
           <div key={i}>
@@ -92,7 +95,7 @@ function TournamentAd() {
           </div>
         ))}
       </div>
-      Գրանցման Վերջնաժամկետ
+      <h2>Գրանցման Վերջնաժամկետ</h2>
       <Select
         selectedOption={deadLineMonth}
         setSelectedOption={(value: string) => setDeadLineMonth(value)}
