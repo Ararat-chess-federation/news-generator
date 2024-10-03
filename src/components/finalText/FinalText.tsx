@@ -1,6 +1,6 @@
 import generateFinalText from "../../helpers/generateFinalText";
 import { IPlayer, IPrizes } from "../../models/player";
-import "./FinalText.css";
+import TextForCopy from "../textForCopy/TextForCopy";
 
 interface IFinalTextProps {
   selectedPlace: string;
@@ -22,18 +22,5 @@ export default function FinalText({
     prizes
   );
 
-  return (
-    <div className="final_container">
-      <div>
-        <button
-          onClick={() => {
-            navigator.clipboard.writeText(finalText);
-          }}
-        >
-          📄
-        </button>
-      </div>
-      {finalText}
-    </div>
-  );
+  return <TextForCopy text={finalText} />;
 }
