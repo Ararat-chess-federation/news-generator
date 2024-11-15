@@ -30,7 +30,7 @@ function getPlayer(data: IJsonData): IPlayer {
     player: modifyName(data[EValuesKeys.name]),
     trainer: data[EValuesKeys.trainer].split("/").pop() as string,
     prize: data[EValuesKeys.place],
-    points: data[EValuesKeys.points],
+    points: Number(data[EValuesKeys.place]) < 4 ? data[EValuesKeys.points] : 0,
   };
 }
 
