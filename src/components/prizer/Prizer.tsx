@@ -1,61 +1,69 @@
 import { Dispatch, SetStateAction } from "react";
 import { IPrizes } from "../../models/player";
 
+type IPlace = "first" | "second" | "third" | "girl";
+
 export interface IPrizerProps {
   text: string;
   setPrizes: Dispatch<SetStateAction<IPrizes>>;
-  place: "first" | "second" | "third" | "girl";
+  place: IPlace;
 }
 
 export default function Prizer({ text, setPrizes, place }: IPrizerProps) {
   return (
     <div style={{ marginTop: "8px" }}>
-      <label>{text} </label>
-      <input
-        onChange={(e) =>
-          setPrizes((prev) => {
-            return {
-              ...prev,
-              [place]: {
-                ...prev[place],
-                player: e.target.value,
-              },
-            };
-          })
-        }
-        type="text"
+      <PrizerLabel
+        label={text}
+        place={place}
+        setPrizes={setPrizes}
+        type="player"
       />
-      <label>(մարզիչ՝ </label>
-      <input
-        onChange={(e) =>
-          setPrizes((prev) => {
-            return {
-              ...prev,
-              [place]: {
-                ...prev[place],
-                trainer: e.target.value,
-              },
-            };
-          })
-        }
-        type="text"
+      <PrizerLabel
+        label="մարզիչ՝"
+        place={place}
+        setPrizes={setPrizes}
+        type="trainer"
       />
-      <label>Միավոր </label>
-      <input
-        type="number"
-        onChange={(e) =>
-          setPrizes((prev) => {
-            return {
-              ...prev,
-              [place]: {
-                ...prev[place],
-                points: e.target.value,
-              },
-            };
-          })
-        }
+      <PrizerLabel
+        label="Միավոր"
+        place={place}
+        setPrizes={setPrizes}
+        type="points"
       />
       )
     </div>
+  );
+}
+
+function PrizerLabel({
+  label,
+  setPrizes,
+  type,
+  place,
+}: {
+  label: string;
+  setPrizes: Dispatch<SetStateAction<IPrizes>>;
+  type: "player" | "trainer" | "points";
+  place: IPlace;
+}) {
+  const inputType = type === "points" ? "number" : "text";
+  return (
+    <>
+      <label>{label} </label>
+      <input
+        type={inputType}
+        onChange={(e) =>
+          setPrizes((prev) => {
+            return {
+              ...prev,
+              [place]: {
+                ...prev[place],
+                [type]: e.target.value,
+              },
+            };
+          })
+        }
+      />
+    </>
   );
 }
