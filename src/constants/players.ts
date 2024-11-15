@@ -1,6 +1,6 @@
 import { IPlayer } from "../models/player";
 
-export const defaultPlayer: IPlayer = { player: "", trainer: "" };
+export const defaultPlayer: IPlayer = { player: "", trainer: "", points: 0 };
 
 export const prizers = {
   third: "3-րդ տեղ՝",

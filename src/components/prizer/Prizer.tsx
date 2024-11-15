@@ -40,6 +40,21 @@ export default function Prizer({ text, setPrizes, place }: IPrizerProps) {
         }
         type="text"
       />
+      <label>Միավոր </label>
+      <input
+        type="number"
+        onChange={(e) =>
+          setPrizes((prev) => {
+            return {
+              ...prev,
+              [place]: {
+                ...prev[place],
+                points: e.target.value,
+              },
+            };
+          })
+        }
+      />
       )
     </div>
   );

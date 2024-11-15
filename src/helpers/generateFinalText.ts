@@ -34,12 +34,13 @@ function generateCategoryPlayers(players: IPlayer[]) {
     ${players.map((el) => generatePrizer(el)).join("\n")}`;
 }
 
-function generatePrizer({ player, trainer }: IPlayer, prize: string = "") {
+function generatePrizer(prizer: IPlayer, prize: string = "") {
+  const { player, trainer, points } = prizer;
   if (!player) {
     return "";
   }
 
-  let text = `${prize} ${player}`;
+  let text = `${points} միավորով ${prize} ${player}`;
 
   if (trainer) {
     text += ` (մարզիչ՝ ${trainer})`;
