@@ -40,7 +40,9 @@ function generatePrizer(prizer: IPlayer, prize: string = "") {
     return "";
   }
 
-  let text = `${points} միավորով ${prize} ${player}`;
+  const playerPoints = points ? `${points} միավորով` : "";
+
+  let text = `${playerPoints} ${prize} ${player}`;
 
   if (trainer) {
     text += ` (մարզիչ՝ ${trainer})`;
