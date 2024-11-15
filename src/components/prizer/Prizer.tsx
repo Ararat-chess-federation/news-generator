@@ -1,15 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
+import { IPrizes } from "../../models/player";
 
 export interface IPrizerProps {
   text: string;
-  setPrizes: Dispatch<
-    SetStateAction<{
-      first: { player: string; trainer: string };
-      second: { player: string; trainer: string };
-      third: { player: string; trainer: string };
-      girl: { player: string; trainer: string };
-    }>
-  >;
+  setPrizes: Dispatch<SetStateAction<IPrizes>>;
   place: "first" | "second" | "third" | "girl";
 }
 
