@@ -27,7 +27,7 @@ export default function ExcelReader() {
     reader.onload = (e) => {
       const jsonData = getJsonFromEvent(e);
       const { place, tournament, finalTable } = getTournamentInfo(jsonData);
-      const players = getPrizersByJSON(finalTable);
+      const players = getPrizersByJSON(finalTable, tournament);
 
       setInfo({ place, tournament });
       setData(players);

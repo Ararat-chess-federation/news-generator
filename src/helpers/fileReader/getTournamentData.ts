@@ -8,12 +8,16 @@ export enum EValuesKeys {
   points = "_6",
 }
 
-export function getTournamentInfo(data: { [key: string]: string }[]) {
+interface IJsonData {
+  [key: string]: string;
+}
+
+export function getTournamentInfo(data: IJsonData[]) {
   const placeAndTournament: any = data[0];
   const finalTable = data.slice(4);
   let [tournament, place] = placeAndTournament[EValuesKeys.place].split(",");
 
-  place += "քաղաքում"
+  place += "քաղաքում";
   if (tournament.endsWith("մրցաշար")) {
     tournament = tournament.slice(0, tournament.lastIndexOf("մրցաշար")).trim();
   }
@@ -21,7 +25,7 @@ export function getTournamentInfo(data: { [key: string]: string }[]) {
   return { tournament, place, finalTable };
 }
 
-function getPlayer(data: { [key: string]: string }): IPlayer {
+function getPlayer(data: IJsonData): IPlayer {
   return {
     player: modifyName(data[EValuesKeys.name]),
     trainer: data[EValuesKeys.trainer].split("/").pop() as string,
@@ -30,7 +34,7 @@ function getPlayer(data: { [key: string]: string }): IPlayer {
   };
 }
 
-export function getPrizersByJSON(jsonData: { [key: string]: string }[]) {
+export function getPrizersByJSON(jsonData: IJsonData[], tournament: string) {
   const prizers = [];
 
   const first = getPlayer(jsonData[0]);
@@ -38,10 +42,11 @@ export function getPrizersByJSON(jsonData: { [key: string]: string }[]) {
   const third = getPlayer(jsonData[2]);
   const girl = { player: "", trainer: "" };
 
+  const pointsToCategory = tournament.startsWith("2") ? 7 : 6;
   for (let i = 3; i < jsonData.length; i++) {
     const player = jsonData[i];
 
-    if (Number(player[EValuesKeys.points]) < 6) {
+    if (Number(player[EValuesKeys.points]) < pointsToCategory) {
       break;
     }
 
