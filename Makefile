@@ -1,5 +1,5 @@
 build:
-	docker compose build news-generator
+	docker compose build --no-cache news-generator
 
 start:
 	docker compose up -d
