@@ -24,7 +24,7 @@ export default async function HtmlFetcher() {
     if (title && href && regionalTournament) {
       tournaments.push({
         title,
-        link: `https://chess-results.com/${href}`,
+        link: href,
       });
     }
   });
