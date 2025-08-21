@@ -24,7 +24,6 @@ export default async function TournamentDetailsPage({ params }: TournamentDetail
 
     // Example: Extract the tournament name and date
     const title = $('h1').first().text().trim();
-    const date = $('td:contains("Date")').next().text().trim();
 
     // Extract the final ranking table as JSON
     const finalTable = $('.CRs1');
@@ -44,8 +43,6 @@ export default async function TournamentDetailsPage({ params }: TournamentDetail
 
     return (
         <div>
-            <h1>{title || 'Tournament Details'}</h1>
-            <p><strong>Date:</strong> {date || 'Unknown'}</p>
             <h2>Final Ranking Table (JSON)</h2>
             <pre>{JSON.stringify(rows, null, 2)}</pre>
         </div>
