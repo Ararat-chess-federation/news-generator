@@ -8,7 +8,7 @@ interface TournamentDetailsProps {
 export default async function TournamentDetailsPage({ params }: TournamentDetailsProps) {
     const data = await params;
     const encodedLink = data.id;
-    const fullLink = decodeURIComponent(`https://chess-results.com/tnr${encodedLink}.aspx?lan=1`);
+    const fullLink = decodeURIComponent(`https://chess-results.com/tnr${encodedLink}.aspx?lan=1&rd=8&art=1`);
 
     const res = await fetch(fullLink, {
         headers: { 'User-Agent': 'Mozilla/5.0' },
