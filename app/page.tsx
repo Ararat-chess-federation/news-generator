@@ -1,5 +1,7 @@
+import HtmlFetcher from "./fetcher";
+
 function App() {
-  return <div></div>;
+  return <HtmlFetcher />;
 }
 
 export default App;
