@@ -9,24 +9,27 @@ export default async function HtmlFetcher() {
     cache: 'no-store',
   });
 
-  if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch: ${res.status}`);
+  }
   const html = await res.text();
-  const $ = cheerio.load(html);
+  const tournaments = getTournaments(html);
 
-  const tournaments: { title: string; link: string }[] = [];
+  for (const tournament of tournaments) {
+    const id = extractId(tournament.link);
+    const round = tournament.title.includes("4-րդ") ? 8 : 9;
+    let fullLink = decodeURIComponent(`https://chess-results.com/tnr${id}.aspx?lan=1&rd=${round}&art=1`);
+    let res = await fetch(fullLink, {
+      headers: { 'User-Agent': 'Mozilla/5.0' },
+      cache: 'no-store',
+    });
 
-  $('a').each((_, el) => {
-    const title = $(el).text().trim();
-    const href = $(el).attr('href');
-    const regionalTournament = KEYWORDS.some((kw) => title.toLowerCase().includes(kw.toLowerCase()));
-
-    if (title && href && regionalTournament) {
-      tournaments.push({
-        title,
-        link: href,
-      });
+    if (!res.ok) {
+      return <div>Failed to load tournament data.</div>;
     }
-  });
+    const html = await res.text();
+    tournament.rows = getRows(html);
+  }
 
   return (
     <div>
@@ -37,9 +40,59 @@ export default async function HtmlFetcher() {
             <a href={tournament.link} target="_blank" rel="noopener noreferrer">
               {tournament.title}
             </a>
+            <pre>{JSON.stringify(tournament.rows)}</pre>
           </li>
         ))}
       </ul>
     </div>
   );
+}
+
+function extractId(url: string) {
+  const match = url.match(/tnr(\d+)\.aspx/);
+  return match ? match[1] : null;
+}
+
+function getTournaments(html: string) {
+  const $ = cheerio.load(html);
+  const tournaments: { title: string; link: string; rows: string[] }[] = [];
+
+  $('a').each((_, el) => {
+    const title = $(el).text().trim();
+    const href = $(el).attr('href');
+    const regionalTournament = KEYWORDS.some((kw) => title.toLowerCase().includes(kw.toLowerCase()));
+
+    if (title && href && regionalTournament) {
+      tournaments.push({
+        title,
+        link: href,
+        rows: [],
+      });
+    }
+  });
+
+  return tournaments;
+}
+
+function getRows(html: string) {
+  const $ = cheerio.load(html);
+
+  const finalTable = $('.CRs1');
+  const headers: string[] = [];
+  finalTable.find('tr').first().find('th').each((_, th) => {
+    headers.push($(th).text().replace(/\s+/g, ' ').trim());
+  });
+
+  const rows: any[] = [];
+  finalTable.find('tr').slice(1).each((_, tr) => {
+    const row: any = {};
+    $(tr).find('td').each((i, td) => {
+      row[headers[i] || `col${i}`] = $(td).text().replace(/\s+/g, ' ').trim();
+    });
+    if (Object.keys(row).length > 0) {
+      rows.push(row);
+    }
+  });
+
+  return rows;
 }
