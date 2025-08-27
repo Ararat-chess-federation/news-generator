@@ -22,10 +22,7 @@ export default async function TournamentDetailsPage({ params }: TournamentDetail
     const html = await res.text();
     const $ = cheerio.load(html);
 
-    // Example: Extract the tournament name and date
-    const title = $('h1').first().text().trim();
-
-    // Extract the final ranking table as JSON
+    const title = $('h2').first().text().trim();
     const finalTable = $('.CRs1');
     const headers: string[] = [];
     finalTable.find('tr').first().find('th').each((_, th) => {
@@ -44,6 +41,7 @@ export default async function TournamentDetailsPage({ params }: TournamentDetail
     return (
         <div>
             <h2>Final Ranking Table (JSON)</h2>
+            <h2>{title}</h2>
             <pre>{JSON.stringify(rows, null, 2)}</pre>
         </div>
     );
