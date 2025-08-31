@@ -1,4 +1,6 @@
 import * as cheerio from 'cheerio';
+import FinalText from '../src/components/finalText/FinalText';
+import { IPlayer, IPrizes } from '../src/models/player';
 
 const url = 'https://chess-results.com/fed.aspx?fed=ARM';
 const KEYWORDS = ['Արարատ', 'Արտաշատ', 'Վեդի', 'Մասիս'];
@@ -29,6 +31,22 @@ export default async function HtmlFetcher() {
     }
     const html = await res.text();
     tournament.rows = getRows(html);
+
+    tournament.players = tournament.rows.slice(0, 4).map((el: any) => {
+      return {
+        player: el.Name,
+        trainer: el['Club/City'],
+        prize: el["Rk."],
+        points: el.TB1,
+      };
+    });
+
+    tournament.prizes = {
+      first: tournament.players[0],
+      second: tournament.players[1],
+      third: tournament.players[2],
+      girl: tournament.players[2]
+    };
   }
 
   return (
@@ -40,7 +58,12 @@ export default async function HtmlFetcher() {
             <a href={tournament.link} target="_blank" rel="noopener noreferrer">
               {tournament.title}
             </a>
-            <pre>{JSON.stringify(tournament.rows)}</pre>
+            <FinalText
+              selectedTournament={tournament.title}
+              selectedPlace={tournament.title}
+              players={tournament.players as any}
+              prizes={tournament.prizes as any}
+            />
           </li>
         ))}
       </ul>
@@ -55,7 +78,7 @@ function extractId(url: string) {
 
 function getTournaments(html: string) {
   const $ = cheerio.load(html);
-  const tournaments: { title: string; link: string; rows: string[] }[] = [];
+  const tournaments: { title: string; link: string; rows: string[], players?: IPlayer[], prizes?: IPrizes }[] = [];
 
   $('a').each((_, el) => {
     const title = $(el).text().trim();

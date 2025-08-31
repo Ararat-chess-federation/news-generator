@@ -1,7 +1,7 @@
 export default function TextForCopy({ text }: { text: string }) {
   return (
     <div className="final_container">
-      <div>
+      {/* <div>
         <button
           onClick={() => {
             navigator.clipboard.writeText(text);
@@ -9,7 +9,7 @@ export default function TextForCopy({ text }: { text: string }) {
         >
           📄
         </button>
-      </div>
+      </div> */}
       {text}
     </div>
   );
