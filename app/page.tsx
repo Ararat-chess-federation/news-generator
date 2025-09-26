@@ -17,7 +17,7 @@ export default async function HtmlFetcher() {
   const html = await res.text();
   const tournaments = getTournaments(html);
   const finishedTournaments: ITournament[] = [];
-  
+
   for (const tournament of tournaments) {
     const id = extractId(tournament.link);
     const round = tournament.title.includes("4-րդ") ? 8 : 9;
@@ -36,20 +36,23 @@ export default async function HtmlFetcher() {
       continue
     }
 
-    tournament.players = tournament.rows.slice(0, 4).map((el: any) => {
-      return {
-        player: el.Name,
-        trainer: el['Club/City'],
-        prize: el["Rk."],
-        points: el.TB1,
-      };
-    });
+    const players = tournament.rows
+      .filter((el: any) => toNumber(el.TB1) > 5.5)
+      .map((el: any) => {
+        return {
+          player: el.Name,
+          trainer: el['Club/City'],
+          prize: el["Rk."],
+          points: el.TB1,
+        };
+      });
 
+    tournament.players = players.slice(3)
     tournament.prizes = {
-      first: tournament.players[0],
-      second: tournament.players[1],
-      third: tournament.players[2],
-      girl: tournament.players[2]
+      first: players[0],
+      second:players[1],
+      third: players[2],
+      girl: players[2]
     };
 
     finishedTournaments.push(tournament)
@@ -57,7 +60,7 @@ export default async function HtmlFetcher() {
 
   return (
     <div>
-      <h2>Filtered Tournaments</h2>
+      <h2>Մրցաշարեր</h2>
       <ul>
         {finishedTournaments.map((tournament) => (
           <li key={tournament.link}>
@@ -65,8 +68,8 @@ export default async function HtmlFetcher() {
               {tournament.title}
             </a>
             <FinalText
-              selectedTournament={tournament.title}
-              selectedPlace={tournament.title}
+              selectedTournament={tournament.title.split(",")[0]}
+              selectedPlace={tournament.title.split(",")[1]}
               players={tournament.players as any}
               prizes={tournament.prizes as any}
             />
@@ -75,6 +78,10 @@ export default async function HtmlFetcher() {
       </ul>
     </div>
   );
+}
+
+function toNumber(str: string) {
+  return parseFloat(str.replace(",", "."));
 }
 
 function extractId(url: string) {

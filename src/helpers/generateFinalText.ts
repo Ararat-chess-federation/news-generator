@@ -22,7 +22,7 @@ export default function generateFinalText(
 }
 
 function generateIntro(selectedPlace: string, selectedTournament: string) {
-  return `${selectedPlace} ավարտվեց ${selectedTournament} մրցաշարը։`;
+  return `${selectedPlace}ում ավարտվեց ${selectedTournament}ը։`;
 }
 
 function generateCategoryPlayers(players: IPlayer[]) {
