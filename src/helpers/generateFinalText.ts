@@ -30,8 +30,7 @@ function generateCategoryPlayers(players: IPlayer[]) {
     return "";
   }
 
-  return `Կարգեր լրացրած մասնակիցներն են՝\n
-    ${players.map((el) => generatePrizer(el)).join("\n")}`;
+  return `Կարգեր լրացրած մասնակիցներն են՝\n${players.map((el) => generatePrizer(el)).join("\n")}`;
 }
 
 function generatePrizer(prizer: IPlayer, prize: string = "") {
