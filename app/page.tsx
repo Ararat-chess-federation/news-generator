@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 import FinalText from '../src/components/finalText/FinalText';
-import { IPlayer, IPrizes } from '../src/models/player';
+import { ITournament } from '../src/models/tournament';
 
 const url = 'https://chess-results.com/fed.aspx?fed=ARM';
 const KEYWORDS = ['Արարատ', 'Արտաշատ', 'Վեդի', 'Մասիս'];
@@ -16,7 +16,8 @@ export default async function HtmlFetcher() {
   }
   const html = await res.text();
   const tournaments = getTournaments(html);
-
+  const finishedTournaments: ITournament[] = [];
+  
   for (const tournament of tournaments) {
     const id = extractId(tournament.link);
     const round = tournament.title.includes("4-րդ") ? 8 : 9;
@@ -31,6 +32,9 @@ export default async function HtmlFetcher() {
     }
     const html = await res.text();
     tournament.rows = getRows(html);
+    if (!tournament.rows.length) {
+      continue
+    }
 
     tournament.players = tournament.rows.slice(0, 4).map((el: any) => {
       return {
@@ -47,13 +51,15 @@ export default async function HtmlFetcher() {
       third: tournament.players[2],
       girl: tournament.players[2]
     };
+
+    finishedTournaments.push(tournament)
   }
 
   return (
     <div>
       <h2>Filtered Tournaments</h2>
       <ul>
-        {tournaments.map((tournament) => (
+        {finishedTournaments.map((tournament) => (
           <li key={tournament.link}>
             <a href={tournament.link} target="_blank" rel="noopener noreferrer">
               {tournament.title}
@@ -78,7 +84,7 @@ function extractId(url: string) {
 
 function getTournaments(html: string) {
   const $ = cheerio.load(html);
-  const tournaments: { title: string; link: string; rows: string[], players?: IPlayer[], prizes?: IPrizes }[] = [];
+  const tournaments: ITournament[] = [];
 
   $('a').each((_, el) => {
     const title = $(el).text().trim();

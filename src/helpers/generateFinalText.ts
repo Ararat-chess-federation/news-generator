@@ -35,6 +35,9 @@ function generateCategoryPlayers(players: IPlayer[]) {
 }
 
 function generatePrizer(prizer: IPlayer, prize: string = "") {
+  if (!prizer) {
+    return ""
+  }
   const { player, trainer, points } = prizer;
   if (!player) {
     return "";
