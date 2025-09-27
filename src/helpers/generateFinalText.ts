@@ -12,9 +12,9 @@ export default function generateFinalText(
   const categoryPlayers = generateCategoryPlayers(players);
   const prizersIntro = "Մրցանակային տեղ գրաված մասնակիցներն են՝";
   const bestGirl = generatePrizer(girl, "Լավագույն աղջիկ` ");
-  const thirdPlace = generatePrizer(third, "3-րդ տեղ`");
-  const secondPlace = generatePrizer(second, "2-րդ տեղ`");
-  const firstPlace = generatePrizer(first, "Մրցաշարի հաղթող`");
+  const thirdPlace = generatePrizer(third, "3-րդ տեղ` ");
+  const secondPlace = generatePrizer(second, "2-րդ տեղ` ");
+  const firstPlace = generatePrizer(first, "Մրցաշարի հաղթող` ");
   const epilog =
     "Շնորհավորում ենք մրցանակակիրներին և մաղթում նորանոր հաջողություններ:";
 
