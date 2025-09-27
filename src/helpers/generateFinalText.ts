@@ -44,7 +44,11 @@ function generatePrizer(prizer: IPlayer, prize: string = "") {
   let text = `${playerPoints} ${prize}${player}`;
 
   if (trainer) {
-    text += ` (մարզիչ՝ ${trainer})`;
+    const nameDataArr = trainer.split("/")
+    const name = nameDataArr[nameDataArr.length - 1]
+    if (nameDataArr.length > 1) {
+      text += ` (մարզիչ՝ ${name})`;
+    }
   }
 
   return `${text}:\n`;
