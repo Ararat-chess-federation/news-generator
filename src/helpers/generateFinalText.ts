@@ -16,13 +16,13 @@ export default function generateFinalText(
   const secondPlace = generatePrizer(second, "2-րդ տեղ` ");
   const firstPlace = generatePrizer(first, "Մրցաշարի հաղթող` ");
   const epilog =
-    "Շնորհավորում ենք մրցանակակիրներին և մաղթում նորանոր հաջողություններ";
+    "Շնորհավորում ենք մրցանակակիրներին և մաղթում նորանոր հաջողություններ:";
 
   return `${intro}\n${categoryPlayers}\n${prizersIntro}\n${bestGirl}\n${thirdPlace}\n${secondPlace}\n${firstPlace}\n${epilog}`;
 }
 
 function generateIntro(selectedPlace: string, selectedTournament: string) {
-  return `${selectedPlace} ավարտվեց ${selectedTournament} մրցաշարը։`;
+  return `${selectedPlace}ում ավարտվեց ${selectedTournament}ը։`;
 }
 
 function generateCategoryPlayers(players: IPlayer[]) {
@@ -30,8 +30,7 @@ function generateCategoryPlayers(players: IPlayer[]) {
     return "";
   }
 
-  return `Կարգեր լրացրած մասնակիցներն են՝\n
-    ${players.map((el) => generatePrizer(el)).join("\n")}`;
+  return `Կարգեր լրացրած մասնակիցներն են՝\n${players.map((el) => generatePrizer(el)).join("\n")}`;
 }
 
 function generatePrizer(prizer: IPlayer, prize: string = "") {
@@ -42,10 +41,14 @@ function generatePrizer(prizer: IPlayer, prize: string = "") {
 
   const playerPoints = points ? `${points} միավորով` : "";
 
-  let text = `${playerPoints} ${prize} ${player}`;
+  let text = `${playerPoints} ${prize}${player}`;
 
   if (trainer) {
-    text += ` (մարզիչ՝ ${trainer})`;
+    const nameDataArr = trainer.split("/")
+    const name = nameDataArr[nameDataArr.length - 1]
+    if (nameDataArr.length > 1) {
+      text += ` (մարզիչ՝ ${name})`;
+    }
   }
 
   return `${text}:\n`;
