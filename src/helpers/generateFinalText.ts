@@ -16,7 +16,7 @@ export default function generateFinalText(
   const secondPlace = generatePrizer(second, "2-րդ տեղ`");
   const firstPlace = generatePrizer(first, "Մրցաշարի հաղթող`");
   const epilog =
-    "Շնորհավորում ենք մրցանակակիրներին և մաղթում նորանոր հաջողություններ";
+    "Շնորհավորում ենք մրցանակակիրներին և մաղթում նորանոր հաջողություններ:";
 
   return `${intro}\n${categoryPlayers}\n${prizersIntro}\n${bestGirl}\n${thirdPlace}\n${secondPlace}\n${firstPlace}\n${epilog}`;
 }
@@ -41,7 +41,7 @@ function generatePrizer(prizer: IPlayer, prize: string = "") {
 
   const playerPoints = points ? `${points} միավորով` : "";
 
-  let text = `${playerPoints} ${prize} ${player}`;
+  let text = `${playerPoints} ${prize}${player}`;
 
   if (trainer) {
     text += ` (մարզիչ՝ ${trainer})`;
