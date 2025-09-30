@@ -39,13 +39,13 @@ export async function getFinishedTournaments(tournaments: ITournament[]) {
         }
 
         const players = tournament.rows
-            .filter((el: any) => toNumber(el.TB1) > 5.5)
+            .filter((el: any) => toNumber(el["Pts."] ?? el.TB1) > 5.5)
             .map((el: any) => {
                 return {
                     player: el.Name,
                     trainer: el['Club/City'],
                     prize: el["Rk."],
-                    points: el.TB1,
+                    points: el["Pts."] ?? el.TB1,
                 };
             });
 
