@@ -1,5 +1,6 @@
 import FinalText from '../src/components/finalText/FinalText';
 import { getFinishedTournaments, getHtml, getTournaments } from '../src/helpers/extractData';
+import { IPlayer, IPrizes } from '../src/models/player';
 
 
 export default async function HtmlFetcher() {
@@ -19,8 +20,8 @@ export default async function HtmlFetcher() {
             <FinalText
               selectedTournament={tournament.title.split(",")[0]}
               selectedPlace={tournament.title.split(",")[1]}
-              players={tournament.players as any}
-              prizes={tournament.prizes as any}
+              players={tournament.players as IPlayer[]}
+              prizes={tournament.prizes as IPrizes}
             />
           </li>
         ))}

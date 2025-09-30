@@ -1,8 +1,9 @@
 import * as cheerio from 'cheerio';
-import { ITournament } from '../models/tournament';
+import { ITournament, ITournamentRow } from '../models/tournament';
 
 const url = 'https://chess-results.com/fed.aspx?fed=ARM';
 const KEYWORDS = ['Արարատ', 'Արտաշատ', 'Վեդի', 'Մասիս'];
+
 
 export async function getHtml() {
     const res = await fetch(url, {
@@ -39,8 +40,8 @@ export async function getFinishedTournaments(tournaments: ITournament[]) {
         }
 
         const players = tournament.rows
-            .filter((el: any) => toNumber(el["Pts."] ?? el.TB1) > 5.5)
-            .map((el: any) => {
+            .filter((el) => toNumber(el["Pts."] ?? el.TB1) > 5.5)
+            .map((el) => {
                 return {
                     player: el.Name,
                     trainer: el['Club/City'],
@@ -102,7 +103,7 @@ function getRows(html: string) {
         headers.push($(th).text().replace(/\s+/g, ' ').trim());
     });
 
-    const rows: any[] = [];
+    const rows: ITournamentRow[] = [];
     finalTable.find('tr').slice(1).each((_, tr) => {
         const row: any = {};
         $(tr).find('td').each((i, td) => {
