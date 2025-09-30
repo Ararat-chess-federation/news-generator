@@ -55,6 +55,7 @@ export async function getFinishedTournaments(tournaments: ITournament[]) {
             first: players[0],
             second: players[1],
             third: players[2],
+            // TODO: find the best girl
             girl: players[2]
         };
 
