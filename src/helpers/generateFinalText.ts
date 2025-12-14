@@ -15,13 +15,17 @@ export default function generateFinalText(
   const thirdPlace = generatePrizer(third, "3-րդ տեղ` ");
   const secondPlace = generatePrizer(second, "2-րդ տեղ` ");
   const firstPlace = generatePrizer(first, "Մրցաշարի հաղթող` ");
-  const epilog =
-    "Շնորհավորում ենք մրցանակակիրներին և մաղթում նորանոր հաջողություններ:";
+  const epilog = selectedPlace && secondPlace ? "Շնորհավորում ենք մրցանակակիրներին և մաղթում նորանոր հաջողություններ:" : "";
+
 
   return `${intro}\n${categoryPlayers}\n${prizersIntro}\n${bestGirl}\n${thirdPlace}\n${secondPlace}\n${firstPlace}\n${epilog}`;
 }
 
 function generateIntro(selectedPlace: string, selectedTournament: string) {
+  if (!selectedPlace && !selectedTournament) {
+    return ""
+  }
+
   return `${selectedPlace}ում ավարտվեց ${selectedTournament}ը։`;
 }
 
