@@ -3,15 +3,13 @@ import { IFinalTextProps } from "../../models/finalText";
 import TextForCopy from "../textForCopy/TextForCopy";
 
 export default function FinalText({
-  selectedPlace,
-  selectedTournament,
+  title,
   players,
   prizes,
 }: IFinalTextProps) {
   const finalText = generateFinalText(
     {
-      selectedPlace,
-      selectedTournament,
+      title,
       players,
       prizes
     }

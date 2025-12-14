@@ -1,7 +1,8 @@
 import { IFinalTextProps } from "../models/finalText";
 import { IPlayer } from "../models/player";
 
-export default function generateFinalText({ players, prizes, selectedPlace, selectedTournament }: IFinalTextProps) {
+export default function generateFinalText({ players, prizes, title }: IFinalTextProps) {
+  const [selectedTournament, selectedPlace] = title.split(",")
   const { first, second, third, girl } = prizes;
 
   const intro = generateIntro(selectedPlace, selectedTournament);

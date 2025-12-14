@@ -5,7 +5,6 @@ import generateFinalText from '../src/helpers/generateFinalText';
 import { IPlayer, IPrizes } from '../src/models/player';
 import { ITournament } from '../src/models/tournament';
 
-
 export default async function HtmlFetcher() {
   const html = await getHtml();
   const tournaments = getTournaments(html);
@@ -24,14 +23,12 @@ export default async function HtmlFetcher() {
   finishedTournaments.splice(combinedTournamentIds[1] - 1, 1);
 
   const finalText1 = generateFinalText({
-    selectedPlace: "",
-    selectedTournament: "",
+    title: "",
     players: [...(combinedTournaments[0].players as IPlayer[]), ...(combinedTournaments[1].players as IPlayer[])],
     prizes: (combinedTournaments[0].prizes as IPrizes)
   })
   const finalText2 = generateFinalText({
-    selectedPlace: "",
-    selectedTournament: "",
+    title: "",
     players: [...(combinedTournaments[1].players as IPlayer[]), ...(combinedTournaments[1].players as IPlayer[])],
     prizes: (combinedTournaments[1].prizes as IPrizes)
   })
@@ -47,8 +44,7 @@ export default async function HtmlFetcher() {
               {tournament.title}
             </a>
             <FinalText
-              selectedTournament={tournament.title.split(",")[0]}
-              selectedPlace={tournament.title.split(",")[1]}
+              title={tournament.title}
               players={tournament.players as IPlayer[]}
               prizes={tournament.prizes as IPrizes}
             />

@@ -1,8 +1,7 @@
 import { IPlayer, IPrizes } from "./player";
 
 export interface IFinalTextProps {
-    selectedPlace: string;
-    selectedTournament: string;
+    title: string;
     players: IPlayer[];
     prizes: IPrizes;
 }
