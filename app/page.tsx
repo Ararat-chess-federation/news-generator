@@ -24,19 +24,30 @@ export default async function HtmlFetcher() {
 
   const finalText1 = generateFinalText({
     title: "",
-    players: [...(combinedTournaments[0].players as IPlayer[]), ...(combinedTournaments[1].players as IPlayer[])],
+    players: [...(combinedTournaments[0].players as IPlayer[])],
     prizes: (combinedTournaments[0].prizes as IPrizes)
   })
   const finalText2 = generateFinalText({
     title: "",
-    players: [...(combinedTournaments[1].players as IPlayer[]), ...(combinedTournaments[1].players as IPlayer[])],
+    players: [...(combinedTournaments[1].players as IPlayer[])],
     prizes: (combinedTournaments[1].prizes as IPrizes)
   })
   const finalText = `${combinedTournaments[0].title.split(",")[1].trim()}ում ավարտվեց 4-րդ կարգի որակավորման մրցաշարը, որը անց էր կացվում երկու խմբով՝\n${combinedTournaments[0].title.split(',')[0].trim().split("մրցաշար")[1].trim()} խմբում՝ \n${finalText1}\n\n${combinedTournaments[1].title.split(',')[0].trim().split("մրցաշար")[1].trim()} խմբում՝ \n${finalText2}\nՇնորհավորում ենք մրցանակակիրներին և մաղթում նորանոր հաջողություններ:`;
   return (
     <div>
       <h2>Մրցաշարեր</h2>
-      {combinedTournaments.length === 2 && <TextForCopy text={finalText} />}
+      {combinedTournaments.length === 2 && (
+        <>
+          <a href={combinedTournaments[0].link} target="_blank" rel="noopener noreferrer">
+            {combinedTournaments[0].title}
+          </a>
+          <br />
+          <a href={combinedTournaments[1].link} target="_blank" rel="noopener noreferrer">
+            {combinedTournaments[1].title}
+          </a>
+          <TextForCopy text={finalText} />
+        </>
+      )}
       <ul>
         {finishedTournaments.map((tournament) => (
           <li key={tournament.link}>
