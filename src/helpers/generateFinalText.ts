@@ -1,11 +1,7 @@
-import { IPlayer, IPrizes } from "../models/player";
+import { IFinalTextProps } from "../models/finalText";
+import { IPlayer } from "../models/player";
 
-export default function generateFinalText(
-  selectedPlace: string,
-  selectedTournament: string,
-  players: IPlayer[],
-  prizes: IPrizes
-) {
+export default function generateFinalText({ players, prizes, selectedPlace, selectedTournament }: IFinalTextProps) {
   const { first, second, third, girl } = prizes;
 
   const intro = generateIntro(selectedPlace, selectedTournament);
@@ -16,7 +12,6 @@ export default function generateFinalText(
   const secondPlace = generatePrizer(second, "2-րդ տեղ` ");
   const firstPlace = generatePrizer(first, "Մրցաշարի հաղթող` ");
   const epilog = selectedPlace && secondPlace ? "Շնորհավորում ենք մրցանակակիրներին և մաղթում նորանոր հաջողություններ:" : "";
-
 
   return `${intro}\n${categoryPlayers}\n${prizersIntro}\n${bestGirl}\n${thirdPlace}\n${secondPlace}\n${firstPlace}\n${epilog}`;
 }

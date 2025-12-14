@@ -1,13 +1,6 @@
 import generateFinalText from "../../helpers/generateFinalText";
-import { IPlayer, IPrizes } from "../../models/player";
+import { IFinalTextProps } from "../../models/finalText";
 import TextForCopy from "../textForCopy/TextForCopy";
-
-interface IFinalTextProps {
-  selectedPlace: string;
-  selectedTournament: string;
-  players: IPlayer[];
-  prizes: IPrizes;
-}
 
 export default function FinalText({
   selectedPlace,
@@ -16,10 +9,12 @@ export default function FinalText({
   prizes,
 }: IFinalTextProps) {
   const finalText = generateFinalText(
-    selectedPlace,
-    selectedTournament,
-    players,
-    prizes
+    {
+      selectedPlace,
+      selectedTournament,
+      players,
+      prizes
+    }
   );
 
   return <TextForCopy text={finalText} />;
