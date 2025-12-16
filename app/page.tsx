@@ -1,13 +1,9 @@
 import CombinedTournamentText from '../src/components/combinedTournamentText/CombinedTournamentText';
 import FinalText from '../src/components/finalText/FinalText';
 import { getFinishedTournaments, getHtml, getTournaments } from '../src/helpers/extractData';
+import { parseTournamentTitle } from '../src/helpers/parseTournamentTitle';
 import { IPlayer, IPrizes } from '../src/models/player';
 import { ITournament } from '../src/models/tournament';
-
-function parseTournamentTitle(title: string): { tournament: string; place: string } {
-  const [tournament, place] = title.split(',').map(part => part.trim());
-  return { tournament, place };
-}
 
 export default async function HtmlFetcher() {
   const html = await getHtml();

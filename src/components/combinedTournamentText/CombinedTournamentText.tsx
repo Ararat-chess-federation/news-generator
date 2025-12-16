@@ -1,3 +1,4 @@
+import { parseTournamentTitle } from "../../helpers/parseTournamentTitle";
 import { IPlayer, IPrizes } from "../../models/player";
 import { ITournament } from "../../models/tournament";
 import { getFinalText } from "../finalText/FinalText";
@@ -6,12 +7,6 @@ import TextForCopy from "../textForCopy/TextForCopy";
 interface ICombinedTournamentTextProps {
   tournaments: [ITournament, ITournament];
 }
-
-function parseTournamentTitle(title: string): { tournament: string; place: string } {
-  const [tournament, place] = title.split(',').map(part => part.trim());
-  return { tournament, place };
-}
-
 function extractGroupName(tournamentTitle: string): string {
   return tournamentTitle.split("մրցաշար")[1]?.trim() || tournamentTitle;
 }
