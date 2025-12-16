@@ -2,18 +2,11 @@ import generateFinalText from "../../helpers/generateFinalText";
 import { IFinalTextProps } from "../../models/finalText";
 import TextForCopy from "../textForCopy/TextForCopy";
 
-export default function FinalText({
-  title,
-  players,
-  prizes,
-}: IFinalTextProps) {
-  const finalText = generateFinalText(
-    {
-      title,
-      players,
-      prizes
-    }
-  );
-
+export default function FinalText(props: IFinalTextProps) {
+  const finalText = generateFinalText(props);
   return <TextForCopy text={finalText} />;
+}
+
+export function getFinalText(props: IFinalTextProps): string {
+  return generateFinalText(props);
 }
