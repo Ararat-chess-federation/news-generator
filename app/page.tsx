@@ -1,7 +1,7 @@
 import CombinedTournamentText from '../src/components/combinedTournamentText/CombinedTournamentText';
 import FinalText from '../src/components/finalText/FinalText';
 import { getFinishedTournaments, getHtml, getTournaments } from '../src/helpers/extractData';
-import { parseTournamentTitle } from '../src/helpers/parseTournamentTitle';
+import getSortedTournaments from '../src/helpers/getSortedTournaments';
 import { IPlayer, IPrizes } from '../src/models/player';
 import { ITournament } from '../src/models/tournament';
 
@@ -9,25 +9,7 @@ export default async function HtmlFetcher() {
   const html = await getHtml();
   const tournaments = getTournaments(html);
   const finishedTournaments = await getFinishedTournaments(tournaments);
-  
-  const combinedIndex = finishedTournaments.findIndex(t => t.title.includes('առանց տարիքային սահմանափակման'));
-  let combinedTournaments: ITournament[] = [];
-  let regularTournaments: ITournament[] = [];
-
-  if (combinedIndex !== -1) {
-    const combinedTournament = finishedTournaments[combinedIndex];
-    const { place } = parseTournamentTitle(combinedTournament.title);
-    const pairIdx = finishedTournaments.findIndex(
-      (t, idx) => idx !== combinedIndex && t.title.includes(place)
-    );
-    
-    combinedTournaments = [combinedTournament, finishedTournaments[pairIdx]];
-    regularTournaments = finishedTournaments.filter(
-      (_, idx) => idx !== combinedIndex && idx !== pairIdx
-    );
-  } else {
-    regularTournaments = finishedTournaments;
-  }
+  const { combinedTournaments, regularTournaments } = getSortedTournaments(finishedTournaments)
 
   return (
     <div>
