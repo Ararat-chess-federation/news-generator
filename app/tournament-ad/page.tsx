@@ -27,7 +27,7 @@ function TournamentAd() {
 
   useEffect(() => {
     const month = months[new Date().getMonth() || 0];
-    setSelectedMonths(Array(10).fill(month));
+    setSelectedMonths(Array(ROUNDS).fill(month));
     setDeadLineMonth(month)
   }, []);
 
@@ -44,19 +44,48 @@ function TournamentAd() {
 
   const handleDayChange = (index: number, value: string) => {
     const newDays = [...selectedDays];
-    newDays[index] = value;
+    const start = parseInt(value, 10);
+
+    if (index === 1 && start === parseInt(newDays[0], 10)) {
+      newDays[0] = String(start);
+      newDays[1] = String(start);
+      for (let pair = 0; pair < Math.ceil((ROUNDS - 2) / 2); pair++) {
+        const pairDay = Math.min(start + 1 + pair, 31);
+        const i1 = 2 + pair * 2;
+        const i2 = i1 + 1;
+        if (i1 < ROUNDS) newDays[i1] = String(pairDay);
+        if (i2 < ROUNDS) newDays[i2] = String(pairDay);
+      }
+    } else {
+      for (let j = index; j < ROUNDS; j++) {
+        const day = Math.min(start + (j - index), 31);
+        newDays[j] = String(day);
+      }
+    }
 
     if (index === 0) {
-      setDeadLineDay(value);
+      setDeadLineDay(String(start));
     }
 
     setSelectedDays(newDays);
   };
 
   const handleTimeChange = (index: number, value: string) => {
-    const newTimes = [...selectedTimes];
-    newTimes[index] = value;
-    setSelectedTimes(newTimes);
+    const updated = [...selectedTimes];
+    updated[index] = value;
+
+    const time1 = updated[0];
+    const time2 = updated[1];
+
+    if (time1 && time2 && time1 !== time2) {
+      const newTimes = Array.from({ length: ROUNDS }, (_v, j) =>
+        j % 2 === 0 ? time1 : time2
+      );
+      setSelectedTimes(newTimes);
+      return;
+    }
+
+    setSelectedTimes(Array(ROUNDS).fill(value));
   };
 
   return (
