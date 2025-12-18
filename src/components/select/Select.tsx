@@ -5,6 +5,7 @@ interface ISelectProps {
   selectedOption: string | number;
   setSelectedOption: Dispatch<React.SetStateAction<string>> | Function;
   title: string;
+  hideOther?: boolean
 }
 
 const OTHER = "Այլ";
@@ -14,6 +15,7 @@ export default function Select({
   selectedOption,
   setSelectedOption,
   title,
+  hideOther
 }: ISelectProps) {
   const [showInput, setShowInput] = useState(false);
   const [otherValue, setOtherValue] = useState("");
@@ -59,7 +61,7 @@ export default function Select({
             {el}
           </option>
         ))}
-        <option value={OTHER}>{OTHER}</option>
+        {!hideOther && <option value={OTHER}>{OTHER}</option>}
       </select>
 
       {showInput && (

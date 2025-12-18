@@ -11,14 +11,16 @@ import {
 } from "../../src/constants/selectOptions";
 import "./TournamentAd.css";
 
+const ROUNDS = 9
+
 function TournamentAd() {
   const [selectedPlace, setSelectedPlace] = useState(places[0]);
   const [selectedTournament, setSelectedTournament] = useState(tournaments[0]);
   const [selectedMonths, setSelectedMonths] = useState(
-    Array(10).fill(months[0])
+    Array(ROUNDS).fill(months[0])
   );
-  const [selectedDays, setSelectedDays] = useState(Array(10).fill(days[0]));
-  const [selectedTimes, setSelectedTimes] = useState(Array(10).fill("15:00"));
+  const [selectedDays, setSelectedDays] = useState(Array(ROUNDS).fill(days[1]));
+  const [selectedTimes, setSelectedTimes] = useState(Array(ROUNDS).fill("15:00"));
   const [deadLineMonth, setDeadLineMonth] = useState(months[0]);
   const [deadLineDay, setDeadLineDay] = useState(days[0]);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -83,7 +85,7 @@ function TournamentAd() {
       <h2>Տուրեր</h2>
       <p>*Ավելորդ դաշտերը թողնել անփոփոխ</p>
       <div className="schedule_container">
-        {[...Array(10)].map((_, i) => (
+        {[...Array(9)].map((_, i) => (
           <div key={i}>
             <p>Տուր {i + 1}</p>
             <div className="round_container">
@@ -94,12 +96,14 @@ function TournamentAd() {
                 }
                 values={months}
                 title="Ամիս"
+                hideOther={true}
               />
               <Select
                 selectedOption={selectedDays[i]}
                 setSelectedOption={(value: string) => handleDayChange(i, value)}
                 values={days}
                 title="Օր"
+                hideOther={true}
               />
               <div style={{ marginTop: "16px" }}>
                 <div>Ժամ</div>
@@ -120,12 +124,14 @@ function TournamentAd() {
           setSelectedOption={(value: string) => setDeadLineMonth(value)}
           values={months}
           title="Ամիս"
+          hideOther={true}
         />
         <Select
           selectedOption={deadLineDay}
           setSelectedOption={(value: string) => setDeadLineDay(value)}
           values={days}
           title="Օր"
+          hideOther={true}
         />
         <div>
           <div style={{ marginTop: "16px" }}>
