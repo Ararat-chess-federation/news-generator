@@ -9,24 +9,36 @@ export default function generateFinalText({ players, prizes, title }: IFinalText
   const parts: string[] = [];
 
   const intro = generateIntro(place, tournament);
-  if (intro) parts.push(intro);
+  if (intro) {
+    parts.push(intro);
+  }
 
   const categoryPlayers = generateCategoryPlayers(players);
-  if (categoryPlayers) parts.push(categoryPlayers);
+  if (categoryPlayers) {
+    parts.push(categoryPlayers);
+  }
 
   parts.push("Մրցանակային տեղ գրաված մասնակիցներն են՝");
 
   const bestGirl = generatePrizer(girl, "Լավագույն աղջիկ` ");
-  if (bestGirl) parts.push(bestGirl);
+  if (bestGirl) {
+    parts.push(bestGirl);
+  }
 
   const thirdPlace = generatePrizer(third, "3-րդ տեղ` ");
-  if (thirdPlace) parts.push(thirdPlace);
+  if (thirdPlace) {
+    parts.push(thirdPlace);
+  }
 
   const secondPlace = generatePrizer(second, "2-րդ տեղ` ");
-  if (secondPlace) parts.push(secondPlace);
+  if (secondPlace) {
+    parts.push(secondPlace);
+  }
 
   const firstPlace = generatePrizer(first, "Մրցաշարի հաղթող` ");
-  if (firstPlace) parts.push(firstPlace);
+  if (firstPlace) {
+    parts.push(firstPlace);
+  }
 
   if (place && secondPlace) {
     parts.push("Շնորհավորում ենք մրցանակակիրներին և մաղթում նորանոր հաջողություններ:");

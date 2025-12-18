@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio';
 import { ITournament, ITournamentRow } from '../models/tournament';
+import { defaultPlayer } from '../constants/players';
 
 const url = 'https://chess-results.com/fed.aspx?fed=ARM';
 const KEYWORDS = ['Արարատ', 'Արտաշատ', 'Վեդի', 'Մասիս'];
@@ -55,7 +56,7 @@ export async function getFinishedTournaments(tournaments: ITournament[]) {
             second: players[1],
             third: players[2],
             // TODO: find the best girl
-            girl: players[2]
+            girl: defaultPlayer
         };
 
         finishedTournaments.push(tournament)

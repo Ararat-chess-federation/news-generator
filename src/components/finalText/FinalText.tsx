@@ -6,7 +6,3 @@ export default function FinalText(props: IFinalTextProps) {
   const finalText = generateFinalText(props);
   return <TextForCopy text={finalText} />;
 }
-
-export function getFinalText(props: IFinalTextProps): string {
-  return generateFinalText(props);
-}
