@@ -1,26 +1,8 @@
 import generateFinalText from "../../helpers/generateFinalText";
-import { IPlayer, IPrizes } from "../../models/player";
+import { IFinalTextProps } from "../../models/finalText";
 import TextForCopy from "../textForCopy/TextForCopy";
 
-interface IFinalTextProps {
-  selectedPlace: string;
-  selectedTournament: string;
-  players: IPlayer[];
-  prizes: IPrizes;
-}
-
-export default function FinalText({
-  selectedPlace,
-  selectedTournament,
-  players,
-  prizes,
-}: IFinalTextProps) {
-  const finalText = generateFinalText(
-    selectedPlace,
-    selectedTournament,
-    players,
-    prizes
-  );
-
+export default function FinalText(props: IFinalTextProps) {
+  const finalText = generateFinalText(props);
   return <TextForCopy text={finalText} />;
 }

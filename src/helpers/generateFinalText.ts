@@ -1,55 +1,92 @@
-import { IPlayer, IPrizes } from "../models/player";
+import { IFinalTextProps } from "../models/finalText";
+import { IPlayer } from "../models/player";
+import { parseTournamentTitle } from "./parseTournamentTitle";
 
-export default function generateFinalText(
-  selectedPlace: string,
-  selectedTournament: string,
-  players: IPlayer[],
-  prizes: IPrizes
-) {
+export default function generateFinalText({ players, prizes, title }: IFinalTextProps) {
+  const { tournament, place } = parseTournamentTitle(title)
   const { first, second, third, girl } = prizes;
 
-  const intro = generateIntro(selectedPlace, selectedTournament);
+  const parts: string[] = [];
+
+  const intro = generateIntro(place, tournament);
+  if (intro) {
+    parts.push(intro);
+  }
+
   const categoryPlayers = generateCategoryPlayers(players);
-  const prizersIntro = "Մրցանակային տեղ գրաված մասնակիցներն են՝";
+  if (categoryPlayers) {
+    parts.push(categoryPlayers);
+  }
+
+  parts.push("Մրցանակային տեղ գրաված մասնակիցներն են՝");
+
   const bestGirl = generatePrizer(girl, "Լավագույն աղջիկ` ");
+  if (bestGirl) {
+    parts.push(bestGirl);
+  }
+
   const thirdPlace = generatePrizer(third, "3-րդ տեղ` ");
+  if (thirdPlace) {
+    parts.push(thirdPlace);
+  }
+
   const secondPlace = generatePrizer(second, "2-րդ տեղ` ");
+  if (secondPlace) {
+    parts.push(secondPlace);
+  }
+
   const firstPlace = generatePrizer(first, "Մրցաշարի հաղթող` ");
-  const epilog =
-    "Շնորհավորում ենք մրցանակակիրներին և մաղթում նորանոր հաջողություններ:";
+  if (firstPlace) {
+    parts.push(firstPlace);
+  }
 
-  return `${intro}\n${categoryPlayers}\n${prizersIntro}\n${bestGirl}\n${thirdPlace}\n${secondPlace}\n${firstPlace}\n${epilog}`;
+  if (place && secondPlace) {
+    parts.push("Շնորհավորում ենք մրցանակակիրներին և մաղթում նորանոր հաջողություններ:");
+  }
+
+  return parts.join("\n");
 }
 
-function generateIntro(selectedPlace: string, selectedTournament: string) {
-  return `${selectedPlace}ում ավարտվեց ${selectedTournament}ը։`;
-}
-
-function generateCategoryPlayers(players: IPlayer[]) {
-  if (!players.length || !players[0].player) {
+function generateIntro(place: string, tournament: string): string {
+  if (!place && !tournament) {
     return "";
   }
 
-  return `Կարգեր լրացրած մասնակիցներն են՝\n${players.map((el) => generatePrizer(el)).join("\n")}`;
+  return `${place}ում ավարտվեց ${tournament}ը։`;
 }
 
-function generatePrizer(prizer: IPlayer, prize: string = "") {
+function generateCategoryPlayers(players: IPlayer[]): string {
+  if (!players.length || !players[0]?.player) {
+    return "";
+  }
+
+  const playerLines = players
+    .map((player) => generatePrizer(player))
+    .filter((line) => line);
+
+  if (!playerLines.length) {
+    return "";
+  }
+
+  return `Կարգեր լրացրած մասնակիցներն են՝\n${playerLines.join("\n")}`;
+}
+
+function generatePrizer(prizer: IPlayer, prize: string = ""): string {
+  if (!prizer?.player) {
+    return "";
+  }
+
   const { player, trainer, points } = prizer;
-  if (!player) {
-    return "";
-  }
-
-  const playerPoints = points ? `${points} միավորով` : "";
-
-  let text = `${playerPoints} ${prize}${player}`;
+  const playerPoints = points ? `${points} միավորով ` : "";
+  const parts: string[] = [playerPoints, prize, player];
 
   if (trainer) {
-    const nameDataArr = trainer.split("/")
-    const name = nameDataArr[nameDataArr.length - 1]
-    if (nameDataArr.length > 1) {
-      text += ` (մարզիչ՝ ${name})`;
+    const trainerParts = trainer.split("/");
+    if (trainerParts.length > 1) {
+      const trainerName = trainerParts[trainerParts.length - 1];
+      parts.push(` (մարզիչ՝ ${trainerName})`);
     }
   }
 
-  return `${text}:\n`;
+  return `${parts.join("")}:\n`;
 }
