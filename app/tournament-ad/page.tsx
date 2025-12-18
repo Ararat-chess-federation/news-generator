@@ -23,10 +23,10 @@ function TournamentAd() {
   const [selectedMonths, setSelectedMonths] = useState(
     Array(ROUNDS).fill(months[0])
   );
-  const [selectedDays, setSelectedDays] = useState(Array(ROUNDS).fill(days[1]));
+  const [selectedDays, setSelectedDays] = useState(Array(ROUNDS).fill(days[new Date().getDate() - 1]));
   const [selectedTimes, setSelectedTimes] = useState(Array(ROUNDS).fill("15:00"));
   const [deadLineMonth, setDeadLineMonth] = useState(months[0]);
-  const [deadLineDay, setDeadLineDay] = useState(days[0]);
+  const [deadLineDay, setDeadLineDay] = useState(days[new Date().getDate() - 1]);
   const [phoneNumber, setPhoneNumber] = useState(() => PLACE_PHONE_MAP[selectedPlace] ?? "");
 
   useEffect(() => {
@@ -130,7 +130,6 @@ function TournamentAd() {
         </div>
       </section>
       <h2>Տուրեր</h2>
-      <p>*Ավելորդ դաշտերը թողնել անփոփոխ</p>
       <div className="schedule_container">
         {[...Array(selectedTournament === "4-րդ կարգի" ? 8 : 9)].map((_, i) => (
           <div key={i}>
