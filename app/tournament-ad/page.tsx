@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import AdText from "../../src/components/adText/AdText";
 import Select from "../../src/components/select/Select";
 import {
@@ -12,6 +12,10 @@ import {
 import "./TournamentAd.css";
 
 const ROUNDS = 9
+const PLACE_PHONE_MAP: Record<string, string> = {
+  [places[0]]: "077898910",
+  [places[1]]: "044306469",
+};
 
 function TournamentAd() {
   const [selectedPlace, setSelectedPlace] = useState(places[0]);
@@ -23,13 +27,26 @@ function TournamentAd() {
   const [selectedTimes, setSelectedTimes] = useState(Array(ROUNDS).fill("15:00"));
   const [deadLineMonth, setDeadLineMonth] = useState(months[0]);
   const [deadLineDay, setDeadLineDay] = useState(days[0]);
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(() => PLACE_PHONE_MAP[selectedPlace] ?? "");
 
   useEffect(() => {
     const month = months[new Date().getMonth() || 0];
     setSelectedMonths(Array(ROUNDS).fill(month));
     setDeadLineMonth(month)
   }, []);
+
+  const prevPlaceRef = useRef<string | null>(null);
+  useEffect(() => {
+    const prevPlace = prevPlaceRef.current;
+    const prevDefault = prevPlace ? PLACE_PHONE_MAP[prevPlace] ?? "" : "";
+    const newDefault = PLACE_PHONE_MAP[selectedPlace] ?? "";
+
+    if (phoneNumber === "" || phoneNumber === prevDefault) {
+      setPhoneNumber(newDefault);
+    }
+
+    prevPlaceRef.current = selectedPlace;
+  }, [selectedPlace, phoneNumber]);
 
   const handleMonthChange = (index: number, value: string) => {
     const newMonths = [...selectedMonths];
@@ -167,7 +184,11 @@ function TournamentAd() {
           <div style={{ marginTop: "16px" }}>
             <label>Հեռախոսահամար</label>
           </div>
-          <input type="text" onChange={(e) => setPhoneNumber(e.target.value)} />
+          <input
+            type="text"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
         </div>
       </div>
 
