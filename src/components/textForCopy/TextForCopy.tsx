@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react";
+import "./TextForCopy.css"
 
 export default function TextForCopy({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -14,7 +15,7 @@ export default function TextForCopy({ text }: { text: string }) {
   return (
     <div className="final_container">
       <div>
-        <button onClick={handleCopy}>
+        <button className="copy_button" onClick={handleCopy}>
           📄
         </button>
         {copied && (

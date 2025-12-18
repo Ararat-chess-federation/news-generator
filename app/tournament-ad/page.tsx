@@ -110,7 +110,7 @@ function TournamentAd() {
 
   return (
     <div className="container">
-      <h2>Վայր և մրցաշար</h2>
+      <h2>Վայր</h2>
       <section className="ad_intro">
         <div>
           <Select

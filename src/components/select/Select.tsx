@@ -1,8 +1,8 @@
 import { ChangeEvent, Dispatch, useState } from "react";
 
 interface ISelectProps {
-  values: string[] | number[];
-  selectedOption: string | number;
+  values: string[];
+  selectedOption: string;
   setSelectedOption: Dispatch<React.SetStateAction<string>> | Function;
   title: string;
   hideOther?: boolean
@@ -57,8 +57,8 @@ export default function Select({
         onChange={handleSelectChange}
       >
         {values.map((el, index) => (
-          <option key={index} value={el}>
-            {el}
+          <option key={index} value={el} title={el as string}>
+            {el.split(" ").slice(0, 3).join(" ")}
           </option>
         ))}
         {!hideOther && <option value={OTHER}>{OTHER}</option>}
