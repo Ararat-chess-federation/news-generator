@@ -46,18 +46,20 @@ function TournamentAd() {
     const newDays = [...selectedDays];
     const start = parseInt(value, 10);
 
+    const rounds = selectedTournament === "4-րդ կարգի" ? 8 : 9;
+
     if (index === 1 && start === parseInt(newDays[0], 10)) {
       newDays[0] = String(start);
       newDays[1] = String(start);
-      for (let pair = 0; pair < Math.ceil((ROUNDS - 2) / 2); pair++) {
+      for (let pair = 0; pair < Math.ceil((rounds - 2) / 2); pair++) {
         const pairDay = Math.min(start + 1 + pair, 31);
         const i1 = 2 + pair * 2;
         const i2 = i1 + 1;
-        if (i1 < ROUNDS) newDays[i1] = String(pairDay);
-        if (i2 < ROUNDS) newDays[i2] = String(pairDay);
+        if (i1 < rounds) newDays[i1] = String(pairDay);
+        if (i2 < rounds) newDays[i2] = String(pairDay);
       }
     } else {
-      for (let j = index; j < ROUNDS; j++) {
+      for (let j = index; j < rounds; j++) {
         const day = Math.min(start + (j - index), 31);
         newDays[j] = String(day);
       }
@@ -74,18 +76,19 @@ function TournamentAd() {
     const updated = [...selectedTimes];
     updated[index] = value;
 
+    const rounds = selectedTournament === "4-րդ կարգի" ? 8 : 9;
     const time1 = updated[0];
     const time2 = updated[1];
 
     if (time1 && time2 && time1 !== time2) {
-      const newTimes = Array.from({ length: ROUNDS }, (_v, j) =>
+      const newTimes = Array.from({ length: rounds }, (_v, j) =>
         j % 2 === 0 ? time1 : time2
       );
       setSelectedTimes(newTimes);
       return;
     }
 
-    setSelectedTimes(Array(ROUNDS).fill(value));
+    setSelectedTimes(Array(rounds).fill(value));
   };
 
   return (
@@ -112,7 +115,7 @@ function TournamentAd() {
       <h2>Տուրեր</h2>
       <p>*Ավելորդ դաշտերը թողնել անփոփոխ</p>
       <div className="schedule_container">
-        {[...Array(9)].map((_, i) => (
+        {[...Array(selectedTournament === "4-րդ կարգի" ? 8 : 9)].map((_, i) => (
           <div key={i}>
             <p>Տուր {i + 1}</p>
             <div className="round_container">
@@ -171,9 +174,9 @@ function TournamentAd() {
       <AdText
         selectedPlace={selectedPlace}
         selectedTournament={selectedTournament}
-        selectedMonths={selectedMonths}
-        selectedDays={selectedDays}
-        selectedTimes={selectedTimes}
+        selectedMonths={selectedMonths.slice(0, selectedTournament === "4-րդ կարգի" ? 8 : 9)}
+        selectedDays={selectedDays.slice(0, selectedTournament === "4-րդ կարգի" ? 8 : 9)}
+        selectedTimes={selectedTimes.slice(0, selectedTournament === "4-րդ կարգի" ? 8 : 9)}
         deadLineMonth={deadLineMonth}
         deadLineDay={deadLineDay}
         phoneNumber={phoneNumber}
