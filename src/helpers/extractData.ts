@@ -4,7 +4,6 @@ import { ITournament, ITournamentRow } from '../models/tournament';
 const url = 'https://chess-results.com/fed.aspx?fed=ARM';
 const KEYWORDS = ['Արարատ', 'Արտաշատ', 'Վեդի', 'Մասիս'];
 
-
 export async function getHtml() {
     const res = await fetch(url, {
         headers: { 'User-Agent': 'Mozilla/5.0' },

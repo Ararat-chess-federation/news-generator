@@ -1,7 +1,7 @@
+import generateFinalText from "../../helpers/generateFinalText";
 import { parseTournamentTitle } from "../../helpers/parseTournamentTitle";
 import { IPlayer, IPrizes } from "../../models/player";
 import { ITournament } from "../../models/tournament";
-import { getFinalText } from "../finalText/FinalText";
 import TextForCopy from "../textForCopy/TextForCopy";
 
 interface ICombinedTournamentTextProps {
@@ -20,13 +20,13 @@ export default function CombinedTournamentText({ tournaments }: ICombinedTournam
   const groupName1 = extractGroupName(tournamentPart1);
   const groupName2 = extractGroupName(tournamentPart2);
   
-  const finalText1 = getFinalText({
+  const finalText1 = generateFinalText({
     title: "",
     players: tournament1.players as IPlayer[],
     prizes: tournament1.prizes as IPrizes
   });
   
-  const finalText2 = getFinalText({
+  const finalText2 = generateFinalText({
     title: "",
     players: tournament2.players as IPlayer[],
     prizes: tournament2.prizes as IPrizes
