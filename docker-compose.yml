@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   news-generator:
     image: news-generator
