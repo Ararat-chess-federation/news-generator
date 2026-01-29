@@ -22,8 +22,9 @@ export async function getFinishedTournaments(tournaments: ITournament[]) {
     const finishedTournaments: ITournament[] = [];
 
     for (const tournament of tournaments) {
-        const id = extractId(tournament.link);
-        const round = tournament.title.includes("4-րդ") ? 8 : 9;
+        const { title, link } = tournament
+        const id = extractId(link);
+        const round = title.includes("4-րդ") || title.includes("3-րդ") ? 8 : 9;
         let fullLink = decodeURIComponent(`https://chess-results.com/tnr${id}.aspx?lan=1&rd=${round}&art=1`);
         let res = await fetch(fullLink, {
             headers: { 'User-Agent': 'Mozilla/5.0' },
@@ -92,7 +93,7 @@ export function getTournaments(html: string) {
         }
     });
 
-    return tournaments;
+    return tournaments.filter(({ title }) => title.includes("որակավորման"));
 }
 
 function getRows(html: string) {
