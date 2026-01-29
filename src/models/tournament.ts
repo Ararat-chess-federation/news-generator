@@ -6,6 +6,7 @@ export interface ITournamentRow {
   SNo: string;
   col2: string;
   Name: string;
+  sex: string;
   FED: string;
   Rtg: string;
   'Club/City': string;

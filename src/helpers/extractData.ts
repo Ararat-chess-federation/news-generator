@@ -24,7 +24,8 @@ export async function getFinishedTournaments(tournaments: ITournament[]) {
     for (const tournament of tournaments) {
         const { title, link } = tournament
         const id = extractId(link);
-        const round = title.includes("4-րդ") || title.includes("3-րդ") ? 8 : 9;
+        const is8Round = checkIs8Round(title)
+        const round = is8Round ? 8 : 9;
         let fullLink = decodeURIComponent(`https://chess-results.com/tnr${id}.aspx?lan=1&rd=${round}&art=1`);
         let res = await fetch(fullLink, {
             headers: { 'User-Agent': 'Mozilla/5.0' },
@@ -41,7 +42,7 @@ export async function getFinishedTournaments(tournaments: ITournament[]) {
         }
 
         const players = tournament.rows
-            .filter((el) => toNumber(el["Pts."] ?? el.TB1) > 5.5)
+            .filter((el) => toNumber(el["Pts."] ?? el.TB1) > (is8Round ? 5.5 : 6.5))
             .map((el) => {
                 return {
                     player: el.Name,
@@ -51,13 +52,19 @@ export async function getFinishedTournaments(tournaments: ITournament[]) {
                 };
             });
 
+        const bestGirlRow = tournament.rows.slice(3).find((el) => el.sex);
+
         tournament.players = players.slice(3)
         tournament.prizes = {
             first: players[0],
             second: players[1],
             third: players[2],
-            // TODO: find the best girl
-            girl: defaultPlayer
+            girl: bestGirlRow ? {
+                player: bestGirlRow.Name,
+                trainer: bestGirlRow['Club/City'],
+                points: bestGirlRow['Pts.'] ?? bestGirlRow.TB1,
+                prize: bestGirlRow['Rk.']
+            } : defaultPlayer
         };
 
         finishedTournaments.push(tournament)
@@ -117,4 +124,8 @@ function getRows(html: string) {
     });
 
     return rows;
+}
+
+function checkIs8Round(title: string) {
+    return title.includes("4-րդ") || title.includes("3-րդ")
 }
