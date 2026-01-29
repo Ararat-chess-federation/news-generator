@@ -52,7 +52,7 @@ function generateIntro(place: string, tournament: string): string {
     return "";
   }
 
-  return `${place}ում ավարտվեց ${tournament}ը։`;
+  return `${place.charAt(0).toUpperCase() + place.slice(1)}ում ավարտվեց ${tournament}ը։`;
 }
 
 function generateCategoryPlayers(players: IPlayer[]): string {
