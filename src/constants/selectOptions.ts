@@ -42,3 +42,11 @@ export const getDaysInMonth = (month: string): number => {
   const year = new Date().getFullYear();
   return new Date(year, monthIndex + 1, 0).getDate();
 };
+
+export const getNextMonth = (month: string): string => {
+  const monthIndex = months.indexOf(month);
+  if (monthIndex === -1) {
+    return month;
+  }
+  return months[(monthIndex + 1) % 12];
+};

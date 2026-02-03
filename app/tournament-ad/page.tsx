@@ -9,6 +9,7 @@ import {
   places,
   tournaments,
   getDaysInMonth,
+  getNextMonth,
 } from "../../src/constants/selectOptions";
 import "./TournamentAd.css";
 
@@ -51,14 +52,12 @@ function TournamentAd() {
 
   const handleMonthChange = (index: number, value: string) => {
     const newMonths = [...selectedMonths];
-    newMonths.fill(value, index);
+    newMonths[index] = value;
 
     const newDays = [...selectedDays];
-    for (let i = index; i < newMonths.length; i++) {
-      const maxDays = getDaysInMonth(newMonths[i]);
-      if (parseInt(newDays[i]) > maxDays) {
-        newDays[i] = String(maxDays);
-      }
+    const maxDays = getDaysInMonth(value);
+    if (parseInt(newDays[index]) > maxDays) {
+      newDays[index] = String(maxDays);
     }
     setSelectedDays(newDays);
 
@@ -75,6 +74,7 @@ function TournamentAd() {
 
   const handleDayChange = (index: number, value: string) => {
     const newDays = [...selectedDays];
+    const newMonths = [...selectedMonths];
     const start = parseInt(value, 10);
 
     const rounds = selectedTournament === "4-րդ կարգի" ? 8 : 9;
@@ -82,21 +82,38 @@ function TournamentAd() {
     if (index === 1 && start === parseInt(newDays[0], 10)) {
       newDays[0] = String(Math.min(start, getDaysInMonth(selectedMonths[0])));
       newDays[1] = String(Math.min(start, getDaysInMonth(selectedMonths[1])));
+      let currentMonth = selectedMonths[0];
+      let currentDay = start + 1;
       for (let pair = 0; pair < Math.ceil((rounds - 2) / 2); pair++) {
-        const pairDay = Math.min(start + 1 + pair, 31);
+        const max = getDaysInMonth(currentMonth);
+        if (currentDay > max) {
+          currentMonth = getNextMonth(currentMonth);
+          currentDay = 1;
+        }
         const i1 = 2 + pair * 2;
         const i2 = i1 + 1;
         if (i1 < rounds) {
-          newDays[i1] = String(Math.min(pairDay, getDaysInMonth(selectedMonths[i1])));
+          newDays[i1] = String(currentDay);
+          newMonths[i1] = currentMonth;
         }
         if (i2 < rounds) {
-          newDays[i2] = String(Math.min(pairDay, getDaysInMonth(selectedMonths[i2])));
+          newDays[i2] = String(currentDay);
+          newMonths[i2] = currentMonth;
         }
+        currentDay++;
       }
     } else {
+      let currentMonth = selectedMonths[index];
+      let currentDay = start;
       for (let j = index; j < rounds; j++) {
-        const day = Math.min(start + (j - index), getDaysInMonth(selectedMonths[j]));
-        newDays[j] = String(day);
+        const max = getDaysInMonth(currentMonth);
+        if (currentDay > max) {
+          currentMonth = getNextMonth(currentMonth);
+          currentDay = 1;
+        }
+        newDays[j] = String(currentDay);
+        newMonths[j] = currentMonth;
+        currentDay++;
       }
     }
 
@@ -105,6 +122,7 @@ function TournamentAd() {
     }
 
     setSelectedDays(newDays);
+    setSelectedMonths(newMonths);
   };
 
   const handleTimeChange = (index: number, value: string) => {
