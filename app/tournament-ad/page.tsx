@@ -31,10 +31,32 @@ function TournamentAd() {
   const [deadLineDay, setDeadLineDay] = useState(days[new Date().getDate() - 1]);
   const [phoneNumber, setPhoneNumber] = useState(() => PLACE_PHONE_MAP[selectedPlace] ?? "");
 
+  const calculateDeadline = (roundMonth: string, roundDay: number) => {
+    const year = new Date().getFullYear();
+    const monthIndex = months.indexOf(roundMonth);
+    const roundDate = new Date(year, monthIndex, roundDay);
+    roundDate.setDate(roundDate.getDate() - 3);
+    const deadlineMonth = months[roundDate.getMonth()];
+    const deadlineDay = roundDate.getDate();
+    return { deadlineMonth, deadlineDay: String(deadlineDay) };
+  };
+
+  const handleDeadlineMonthChange = (value: string) => {
+    setDeadLineMonth(value);
+    const maxDays = getDaysInMonth(value);
+    if (parseInt(deadLineDay) > maxDays) {
+      setDeadLineDay(String(maxDays));
+    }
+  };
+
   useEffect(() => {
     const month = months[new Date().getMonth() || 0];
     setSelectedMonths(Array(ROUNDS).fill(month));
-    setDeadLineMonth(month)
+    setDeadLineMonth(month);
+    const currentDay = new Date().getDate() - 1;
+    const { deadlineMonth, deadlineDay } = calculateDeadline(month, currentDay);
+    setDeadLineMonth(deadlineMonth);
+    setDeadLineDay(deadlineDay);
   }, []);
 
   const prevPlaceRef = useRef<string | null>(null);
@@ -62,11 +84,9 @@ function TournamentAd() {
     setSelectedDays(newDays);
 
     if (index === 0) {
-      const maxDeadline = getDaysInMonth(value);
-      if (parseInt(deadLineDay) > maxDeadline) {
-        setDeadLineDay(String(maxDeadline));
-      }
       setDeadLineMonth(value);
+      const { deadlineDay } = calculateDeadline(value, parseInt(selectedDays[0]));
+      setDeadLineDay(deadlineDay);
     }
 
     setSelectedMonths(newMonths);
@@ -118,7 +138,9 @@ function TournamentAd() {
     }
 
     if (index === 0) {
-      setDeadLineDay(String(Math.min(start, getDaysInMonth(deadLineMonth))));
+      const { deadlineMonth, deadlineDay } = calculateDeadline(selectedMonths[0], start);
+      setDeadLineMonth(deadlineMonth);
+      setDeadLineDay(deadlineDay);
     }
 
     setSelectedDays(newDays);
@@ -203,7 +225,7 @@ function TournamentAd() {
       <div className="deadline_container">
         <Select
           selectedOption={deadLineMonth}
-          setSelectedOption={(value: string) => setDeadLineMonth(value)}
+          setSelectedOption={handleDeadlineMonthChange}
           values={months}
           title="Ամիս"
           hideOther={true}
