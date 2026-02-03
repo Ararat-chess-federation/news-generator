@@ -24,8 +24,8 @@ export default function Select({
     const value = e.target.value;
     if (value === OTHER) {
       setShowInput(true);
-      setSelectedOption("");
-
+      setSelectedOption(OTHER);
+      setOtherValue("");
       return;
     }
 
@@ -52,8 +52,8 @@ export default function Select({
         <label>{title}</label>
       </div>
       <select
-        id="location-select"
-        value={selectedOption || values[0]}
+        id={`${title}-select`}
+        value={selectedOption}
         onChange={handleSelectChange}
       >
         {values.map((el, index) => (

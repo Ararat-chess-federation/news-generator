@@ -8,6 +8,7 @@ import {
   months,
   places,
   tournaments,
+  getDaysInMonth,
 } from "../../src/constants/selectOptions";
 import "./TournamentAd.css";
 
@@ -52,7 +53,20 @@ function TournamentAd() {
     const newMonths = [...selectedMonths];
     newMonths.fill(value, index);
 
+    const newDays = [...selectedDays];
+    for (let i = index; i < newMonths.length; i++) {
+      const maxDays = getDaysInMonth(newMonths[i]);
+      if (parseInt(newDays[i]) > maxDays) {
+        newDays[i] = String(maxDays);
+      }
+    }
+    setSelectedDays(newDays);
+
     if (index === 0) {
+      const maxDeadline = getDaysInMonth(value);
+      if (parseInt(deadLineDay) > maxDeadline) {
+        setDeadLineDay(String(maxDeadline));
+      }
       setDeadLineMonth(value);
     }
 
@@ -66,24 +80,28 @@ function TournamentAd() {
     const rounds = selectedTournament === "4-րդ կարգի" ? 8 : 9;
 
     if (index === 1 && start === parseInt(newDays[0], 10)) {
-      newDays[0] = String(start);
-      newDays[1] = String(start);
+      newDays[0] = String(Math.min(start, getDaysInMonth(selectedMonths[0])));
+      newDays[1] = String(Math.min(start, getDaysInMonth(selectedMonths[1])));
       for (let pair = 0; pair < Math.ceil((rounds - 2) / 2); pair++) {
         const pairDay = Math.min(start + 1 + pair, 31);
         const i1 = 2 + pair * 2;
         const i2 = i1 + 1;
-        if (i1 < rounds) newDays[i1] = String(pairDay);
-        if (i2 < rounds) newDays[i2] = String(pairDay);
+        if (i1 < rounds) {
+          newDays[i1] = String(Math.min(pairDay, getDaysInMonth(selectedMonths[i1])));
+        }
+        if (i2 < rounds) {
+          newDays[i2] = String(Math.min(pairDay, getDaysInMonth(selectedMonths[i2])));
+        }
       }
     } else {
       for (let j = index; j < rounds; j++) {
-        const day = Math.min(start + (j - index), 31);
+        const day = Math.min(start + (j - index), getDaysInMonth(selectedMonths[j]));
         newDays[j] = String(day);
       }
     }
 
     if (index === 0) {
-      setDeadLineDay(String(start));
+      setDeadLineDay(String(Math.min(start, getDaysInMonth(deadLineMonth))));
     }
 
     setSelectedDays(newDays);
@@ -147,7 +165,7 @@ function TournamentAd() {
               <Select
                 selectedOption={selectedDays[i]}
                 setSelectedOption={(value: string) => handleDayChange(i, value)}
-                values={days}
+                values={days.slice(0, getDaysInMonth(selectedMonths[i]))}
                 title="Օր"
                 hideOther={true}
               />
@@ -175,7 +193,7 @@ function TournamentAd() {
         <Select
           selectedOption={deadLineDay}
           setSelectedOption={(value: string) => setDeadLineDay(value)}
-          values={days}
+          values={days.slice(0, getDaysInMonth(deadLineMonth))}
           title="Օր"
           hideOther={true}
         />
