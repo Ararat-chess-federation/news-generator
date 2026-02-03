@@ -22,6 +22,7 @@ const PLACE_PHONE_MAP: Record<string, string> = {
 function TournamentAd() {
   const [selectedPlace, setSelectedPlace] = useState(places[0]);
   const [selectedTournament, setSelectedTournament] = useState(tournaments[0]);
+  const [roundsCount, setRoundsCount] = useState(9);
   const [selectedMonths, setSelectedMonths] = useState(
     Array(ROUNDS).fill(months[0])
   );
@@ -58,6 +59,38 @@ function TournamentAd() {
     setDeadLineMonth(deadlineMonth);
     setDeadLineDay(deadlineDay);
   }, []);
+
+  useEffect(() => {
+    const defaultRounds = selectedTournament === "4-րդ կարգի" ? 8 : 9;
+    setRoundsCount(defaultRounds);
+  }, [selectedTournament]);
+
+  useEffect(() => {
+    setSelectedMonths(prev => {
+      const newArr = prev.slice(0, roundsCount);
+      const last = prev[prev.length - 1] || months[0];
+      while (newArr.length < roundsCount) {
+        newArr.push(last);
+      }
+      return newArr;
+    });
+    setSelectedDays(prev => {
+      const newArr = prev.slice(0, roundsCount);
+      const last = prev[prev.length - 1] || days[0];
+      while (newArr.length < roundsCount) {
+        newArr.push(last);
+      }
+      return newArr;
+    });
+    setSelectedTimes(prev => {
+      const newArr = prev.slice(0, roundsCount);
+      const last = prev[prev.length - 1] || "15:00";
+      while (newArr.length < roundsCount) {
+        newArr.push(last);
+      }
+      return newArr;
+    });
+  }, [roundsCount]);
 
   const prevPlaceRef = useRef<string | null>(null);
   useEffect(() => {
@@ -97,7 +130,7 @@ function TournamentAd() {
     const newMonths = [...selectedMonths];
     const start = parseInt(value, 10);
 
-    const rounds = selectedTournament === "4-րդ կարգի" ? 8 : 9;
+    const rounds = roundsCount;
 
     if (index === 1 && start === parseInt(newDays[0], 10)) {
       newDays[0] = String(Math.min(start, getDaysInMonth(selectedMonths[0])));
@@ -151,7 +184,7 @@ function TournamentAd() {
     const updated = [...selectedTimes];
     updated[index] = value;
 
-    const rounds = selectedTournament === "4-րդ կարգի" ? 8 : 9;
+    const rounds = roundsCount;
     const time1 = updated[0];
     const time2 = updated[1];
 
@@ -186,10 +219,18 @@ function TournamentAd() {
             title="Մրցաշար"
           />
         </div>
+        <div>
+          <Select
+            selectedOption={String(roundsCount)}
+            setSelectedOption={(value: string) => setRoundsCount(parseInt(value))}
+            values={["6", "7", "8", "9", "10", "11"]}
+            title="Տուրերի քանակ"
+          />
+        </div>
       </section>
       <h2>Տուրեր</h2>
       <div className="schedule_container">
-        {[...Array(selectedTournament === "4-րդ կարգի" ? 8 : 9)].map((_, i) => (
+        {[...Array(roundsCount)].map((_, i) => (
           <div key={i}>
             <p>Տուր {i + 1}</p>
             <div className="round_container">
@@ -200,20 +241,18 @@ function TournamentAd() {
                 }
                 values={months}
                 title="Ամիս"
-                hideOther={true}
               />
               <Select
                 selectedOption={selectedDays[i]}
                 setSelectedOption={(value: string) => handleDayChange(i, value)}
                 values={days.slice(0, getDaysInMonth(selectedMonths[i]))}
                 title="Օր"
-                hideOther={true}
               />
               <div style={{ marginTop: "16px" }}>
                 <div>Ժամ</div>
                 <input
                   type="time"
-                  value={selectedTimes[i]}
+                  value={selectedTimes[i] || "15:00"}
                   onChange={(e) => handleTimeChange(i, e.target.value)}
                 />
               </div>
@@ -228,14 +267,12 @@ function TournamentAd() {
           setSelectedOption={handleDeadlineMonthChange}
           values={months}
           title="Ամիս"
-          hideOther={true}
         />
         <Select
           selectedOption={deadLineDay}
           setSelectedOption={(value: string) => setDeadLineDay(value)}
           values={days.slice(0, getDaysInMonth(deadLineMonth))}
           title="Օր"
-          hideOther={true}
         />
         <div>
           <div style={{ marginTop: "16px" }}>
@@ -252,9 +289,9 @@ function TournamentAd() {
       <AdText
         selectedPlace={selectedPlace}
         selectedTournament={selectedTournament}
-        selectedMonths={selectedMonths.slice(0, selectedTournament === "4-րդ կարգի" ? 8 : 9)}
-        selectedDays={selectedDays.slice(0, selectedTournament === "4-րդ կարգի" ? 8 : 9)}
-        selectedTimes={selectedTimes.slice(0, selectedTournament === "4-րդ կարգի" ? 8 : 9)}
+        selectedMonths={selectedMonths.slice(0, roundsCount)}
+        selectedDays={selectedDays.slice(0, roundsCount)}
+        selectedTimes={selectedTimes.slice(0, roundsCount)}
         deadLineMonth={deadLineMonth}
         deadLineDay={deadLineDay}
         phoneNumber={phoneNumber}

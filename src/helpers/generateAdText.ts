@@ -8,7 +8,7 @@ export default function generateAdText(
   deadLineDay: string,
   phoneNumber: string
 ) {
-  const days = selectedDays.slice(0, selectedDays.indexOf("0"));
+  const days = selectedDays;
   const intro = generateIntro(
     selectedPlace,
     selectedTournament,
