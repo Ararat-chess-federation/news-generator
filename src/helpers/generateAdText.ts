@@ -8,7 +8,7 @@ export default function generateAdText(
   deadLineDay: string,
   phoneNumber: string
 ) {
-  const days = selectedDays.slice(0, selectedDays.indexOf("0"));
+  const days = selectedDays;
   const intro = generateIntro(
     selectedPlace,
     selectedTournament,
@@ -27,7 +27,7 @@ export default function generateAdText(
   const deadline = generateDeadLine(deadLineMonth, deadLineDay);
   const number = generateNumber(phoneNumber);
 
-  return `${intro}\n${schedule}\n ${deadline}\n ${number}`;
+  return `${intro}\n${schedule}\n ${deadline}${number ? `\n ${number}` : ""}`;
 }
 
 function generateIntro(
@@ -70,5 +70,8 @@ function generateDeadLine(deadLineMonth: string, deadLineDay: string) {
 }
 
 function generateNumber(phoneNumber: string) {
+  if (!phoneNumber || phoneNumber.trim() === "") {
+    return "";
+  }
   return `Գրանցվելու համար զանգահարել ${phoneNumber} հեռախոսահամարով`;
 }
