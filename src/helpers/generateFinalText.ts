@@ -20,22 +20,22 @@ export default function generateFinalText({ players, prizes, title }: IFinalText
 
   parts.push("Մրցանակային տեղ գրաված մասնակիցներն են՝");
 
-  const bestGirl = generatePrizer(girl, "Լավագույն աղջիկ` ");
+  const bestGirl = generatePrizer(girl, "Լավագույն աղջիկ՝ ");
   if (bestGirl) {
     parts.push(bestGirl);
   }
 
-  const thirdPlace = generatePrizer(third, "3-րդ տեղ` ");
+  const thirdPlace = generatePrizer(third, "3-րդ տեղ՝ ");
   if (thirdPlace) {
     parts.push(thirdPlace);
   }
 
-  const secondPlace = generatePrizer(second, "2-րդ տեղ` ");
+  const secondPlace = generatePrizer(second, "2-րդ տեղ՝ ");
   if (secondPlace) {
     parts.push(secondPlace);
   }
 
-  const firstPlace = generatePrizer(first, "Մրցաշարի հաղթող` ");
+  const firstPlace = generatePrizer(first, "Մրցաշարի հաղթող՝ ");
   if (firstPlace) {
     parts.push(firstPlace);
   }
