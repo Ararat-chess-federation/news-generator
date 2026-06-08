@@ -6,7 +6,7 @@ export default function getSortedTournaments(finishedTournaments: ITournament[])
     let combinedTournaments: ITournament[] = [];
     let regularTournaments: ITournament[] = [];
 
-    if (combinedIndex > -1) {
+    if (combinedIndex === -1) {
         regularTournaments = finishedTournaments;
 
         return { combinedTournaments, regularTournaments }
