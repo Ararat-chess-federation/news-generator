@@ -19,28 +19,46 @@ const PLACE_PHONE_MAP: Record<string, string> = {
   [places[1]]: "044306469",
 };
 
+function calculateDeadline(roundMonth: string, roundDay: number) {
+  const year = new Date().getFullYear();
+  const monthIndex = months.indexOf(roundMonth);
+  const roundDate = new Date(year, monthIndex, roundDay);
+  roundDate.setDate(roundDate.getDate() - 3);
+  return {
+    deadlineMonth: months[roundDate.getMonth()],
+    deadlineDay: String(roundDate.getDate()),
+  };
+}
+
+function getConsecutiveSchedule(rounds: number) {
+  const today = new Date();
+  const date = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const initDays: string[] = [];
+  const initMonths: string[] = [];
+  for (let i = 0; i < rounds; i++) {
+    initDays.push(String(date.getDate()));
+    initMonths.push(months[date.getMonth()]);
+    date.setDate(date.getDate() + 1);
+  }
+  return { initDays, initMonths };
+}
+
 function TournamentAd() {
   const [selectedPlace, setSelectedPlace] = useState(places[0]);
   const [selectedTournament, setSelectedTournament] = useState(tournaments[0]);
   const [roundsCount, setRoundsCount] = useState(9);
-  const [selectedMonths, setSelectedMonths] = useState(
-    Array(ROUNDS).fill(months[0])
-  );
-  const [selectedDays, setSelectedDays] = useState(Array(ROUNDS).fill(days[new Date().getDate() - 1]));
+  const [selectedMonths, setSelectedMonths] = useState(() => getConsecutiveSchedule(ROUNDS).initMonths);
+  const [selectedDays, setSelectedDays] = useState(() => getConsecutiveSchedule(ROUNDS).initDays);
   const [selectedTimes, setSelectedTimes] = useState(Array(ROUNDS).fill("15:00"));
-  const [deadLineMonth, setDeadLineMonth] = useState(months[0]);
-  const [deadLineDay, setDeadLineDay] = useState(days[new Date().getDate() - 1]);
-  const [phoneNumber, setPhoneNumber] = useState(() => PLACE_PHONE_MAP[selectedPlace] ?? "");
-
-  const calculateDeadline = (roundMonth: string, roundDay: number) => {
-    const year = new Date().getFullYear();
-    const monthIndex = months.indexOf(roundMonth);
-    const roundDate = new Date(year, monthIndex, roundDay);
-    roundDate.setDate(roundDate.getDate() - 3);
-    const deadlineMonth = months[roundDate.getMonth()];
-    const deadlineDay = roundDate.getDate();
-    return { deadlineMonth, deadlineDay: String(deadlineDay) };
-  };
+  const [deadLineMonth, setDeadLineMonth] = useState(() => {
+    const today = new Date();
+    return calculateDeadline(months[today.getMonth()], today.getDate()).deadlineMonth;
+  });
+  const [deadLineDay, setDeadLineDay] = useState(() => {
+    const today = new Date();
+    return calculateDeadline(months[today.getMonth()], today.getDate()).deadlineDay;
+  });
+  const [phoneNumber, setPhoneNumber] = useState(() => PLACE_PHONE_MAP[places[0]] ?? "");
 
   const handleDeadlineMonthChange = (value: string) => {
     setDeadLineMonth(value);
@@ -49,16 +67,6 @@ function TournamentAd() {
       setDeadLineDay(String(maxDays));
     }
   };
-
-  useEffect(() => {
-    const month = months[new Date().getMonth() || 0];
-    setSelectedMonths(Array(ROUNDS).fill(month));
-    setDeadLineMonth(month);
-    const currentDay = new Date().getDate() - 1;
-    const { deadlineMonth, deadlineDay } = calculateDeadline(month, currentDay);
-    setDeadLineMonth(deadlineMonth);
-    setDeadLineDay(deadlineDay);
-  }, []);
 
   useEffect(() => {
     const defaultRounds = selectedTournament === "4-րդ կարգի" ? 8 : 9;
@@ -84,9 +92,12 @@ function TournamentAd() {
     });
     setSelectedTimes(prev => {
       const newArr = prev.slice(0, roundsCount);
-      const last = prev[prev.length - 1] || "15:00";
+      const time1 = prev[0] || "15:00";
+      const time2 = prev.length > 1 ? prev[1] : time1;
+      const isAlternating = time1 !== time2;
       while (newArr.length < roundsCount) {
-        newArr.push(last);
+        const idx = newArr.length;
+        newArr.push(isAlternating ? (idx % 2 === 0 ? time1 : time2) : time1);
       }
       return newArr;
     });
@@ -132,7 +143,9 @@ function TournamentAd() {
 
     const rounds = roundsCount;
 
-    if (index === 1 && start === parseInt(newDays[0], 10)) {
+    const isPairedMode = selectedDays.length >= 2 && selectedDays[0] === selectedDays[1];
+
+    if ((index === 0 && isPairedMode) || (index === 1 && start === parseInt(newDays[0], 10))) {
       newDays[0] = String(Math.min(start, getDaysInMonth(selectedMonths[0])));
       newDays[1] = String(Math.min(start, getDaysInMonth(selectedMonths[1])));
       let currentMonth = selectedMonths[0];
