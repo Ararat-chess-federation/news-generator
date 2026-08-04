@@ -1,5 +1,5 @@
-import { IFinalTextProps } from "../models/finalText";
-import { IPlayer } from "../models/player";
+import type { IFinalTextProps } from "../models/finalText";
+import type { IPlayer } from "../models/player";
 import { parseTournamentTitle } from "./parseTournamentTitle";
 
 export default function generateFinalText({ players, prizes, title }: IFinalTextProps) {

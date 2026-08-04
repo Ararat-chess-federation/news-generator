@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch } from "react";
+import type { ChangeEvent, Dispatch } from "react";
 
 interface ISelectProps {
   values: string[];

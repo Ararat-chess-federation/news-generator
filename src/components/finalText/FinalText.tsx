@@ -1,5 +1,5 @@
 import generateFinalText from "../../helpers/generateFinalText";
-import { IFinalTextProps } from "../../models/finalText";
+import type { IFinalTextProps } from "../../models/finalText";
 import TextForCopy from "../textForCopy/TextForCopy";
 
 export default function FinalText(props: IFinalTextProps) {

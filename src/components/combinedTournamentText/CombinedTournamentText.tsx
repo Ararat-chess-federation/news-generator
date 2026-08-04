@@ -1,7 +1,7 @@
 import generateFinalText from "../../helpers/generateFinalText";
 import { parseTournamentTitle } from "../../helpers/parseTournamentTitle";
-import { IPlayer, IPrizes } from "../../models/player";
-import { ITournament } from "../../models/tournament";
+import type { IPlayer, IPrizes } from "../../models/player";
+import type { ITournament } from "../../models/tournament";
 import TextForCopy from "../textForCopy/TextForCopy";
 
 interface ICombinedTournamentTextProps {

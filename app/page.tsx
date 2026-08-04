@@ -2,8 +2,8 @@ import CombinedTournamentText from '../src/components/combinedTournamentText/Com
 import FinalText from '../src/components/finalText/FinalText';
 import { getFinishedTournaments, getHtml, getTournaments } from '../src/helpers/extractData';
 import getSortedTournaments from '../src/helpers/getSortedTournaments';
-import { IPlayer, IPrizes } from '../src/models/player';
-import { ITournament } from '../src/models/tournament';
+import type { IPlayer, IPrizes } from '../src/models/player';
+import type { ITournament } from '../src/models/tournament';
 
 export default async function HtmlFetcher() {
   const html = await getHtml();

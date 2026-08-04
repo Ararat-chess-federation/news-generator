@@ -1,4 +1,4 @@
-import { ITournament } from "../models/tournament";
+import type { ITournament } from "../models/tournament";
 import { parseTournamentTitle } from "./parseTournamentTitle";
 
 export default function getSortedTournaments(finishedTournaments: ITournament[]) {

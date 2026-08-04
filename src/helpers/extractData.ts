@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import { ITournament, ITournamentRow } from '../models/tournament';
+import type { ITournament, ITournamentRow } from '../models/tournament';
 import { defaultPlayer } from '../constants/players';
 
 const url = 'https://chess-results.com/fed.aspx?fed=ARM';

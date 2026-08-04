@@ -1,4 +1,4 @@
-import { IPlayer, IPrizes } from "./player";
+import type { IPlayer, IPrizes } from "./player";
 
 export interface IFinalTextProps {
     title: string;
