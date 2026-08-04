@@ -1,0 +1,28 @@
+.corrector-layout {
+  display: flex;
+  gap: 24px;
+  padding: 16px;
+  align-items: flex-start;
+}
+
+.corrector-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.corrector-section label {
+  font-weight: bold;
+}
+
+.corrector-section textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 18px;
+  font-family: inherit;
+  resize: vertical;
+  border: 1px solid black;
+  border-radius: 4px;
+  line-height: 1.5;
+}

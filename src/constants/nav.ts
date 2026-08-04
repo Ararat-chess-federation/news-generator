@@ -7,4 +7,8 @@ export const navigation = [
     link: "/tournament-ad",
     title: "Մրցաշարի հայտարարություն",
   },
+  {
+    link: "/news-corrector",
+    title: "Նորության ուղղում",
+  },
 ];
