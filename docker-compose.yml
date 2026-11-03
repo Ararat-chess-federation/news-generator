@@ -6,3 +6,12 @@ services:
     restart: always 
     ports:
         - 3003:80   
+    environment:
+      FB_PAGE_ID: ${FB_PAGE_ID:-}
+      FB_PAGE_ACCESS_TOKEN: ${FB_PAGE_ACCESS_TOKEN:-}
+      FB_GRAPH_VERSION: ${FB_GRAPH_VERSION:-}
+    volumes:
+      - news-generator-data:/app/data
+
+volumes:
+  news-generator-data:
