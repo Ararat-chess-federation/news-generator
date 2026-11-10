@@ -56,13 +56,16 @@ export default async function HtmlFetcher() {
   items.sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
 
   return (
-    <div className="container">
-      <h2>Մրցաշարեր</h2>
+    <main className="container">
+      <header className="page_header">
+        <h1>Մրցաշարերի արդյունքներ</h1>
+        <p>Ավարտված որակավորման մրցաշարերի նորությունները chess-results.com-ից</p>
+      </header>
       <NewsList
         items={items}
         facebookConfigured={configured}
         checkError={checkError}
       />
-    </div>
+    </main>
   );
 }

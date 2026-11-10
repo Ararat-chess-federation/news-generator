@@ -65,7 +65,7 @@ export default function FacebookSave({ status, postUrl, postedAt, onSave, onSave
         <img className="fb_save_image" src={defaultImage} alt="Լռելյայն նկար" />
       )}
       <div className="fb_save_actions">
-        <button onClick={handleSave} disabled={isPending}>
+        <button type="button" className="btn btn--facebook" onClick={handleSave} disabled={isPending}>
           {isPending ? "Պահպանվում է..." : "Պահպանել որպես Facebook սևագիր"}
         </button>
         {error && <span className="fb_save_error">{error}</span>}

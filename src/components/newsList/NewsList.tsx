@@ -19,7 +19,12 @@ export default function NewsList({ items: initialItems, facebookConfigured, chec
   };
 
   if (!items.length) {
-    return <p className="news_empty">Ավարտված մրցաշարեր չկան</p>;
+    return (
+      <p className="news_empty">
+        <span className="news_empty_icon" aria-hidden>♟</span>
+        Ավարտված մրցաշարեր այս պահին չկան
+      </p>
+    );
   }
 
   return (

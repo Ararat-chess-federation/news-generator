@@ -1,12 +1,14 @@
 .status_badge {
+  display: inline-flex;
+  align-items: center;
   flex-shrink: 0;
-  padding: 4px 12px;
+  padding: 3px 10px;
   border-radius: 999px;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
-  background: #e5e7eb;
-  color: #374151;
+  background: #e2e8f0;
+  color: #334155;
 }
 
 .status_badge--new {
@@ -25,49 +27,61 @@
 }
 
 .fb_save {
-  margin-top: 12px;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+  margin-top: 12px;
 }
 
 .fb_save_meta {
   display: flex;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 4px 16px;
   margin-top: 8px;
-  color: #4b5563;
+  font-size: 14px;
+  color: var(--color-muted);
 }
 
-.fb_save_meta * {
-  font-size: 16px;
+.fb_save_meta a {
+  font-weight: 500;
 }
 
 .fb_save_actions {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.fb_save_actions button {
-  border: none;
-  background: #1877f2;
-  color: #fff;
-}
-
-.fb_save_actions button:disabled {
-  opacity: 0.6;
-  cursor: wait;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1;
+  min-width: 220px;
 }
 
 .fb_save_error {
-  color: #b91c1c;
+  font-size: 14px;
+  color: var(--color-danger);
 }
 
 .fb_save_image {
-  width: 160px;
+  width: 120px;
   aspect-ratio: 4 / 5;
   object-fit: contain;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: #fff;
+}
+
+@media (max-width: 640px) {
+  .fb_save {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .fb_save_image {
+    width: 96px;
+  }
+
+  .fb_save_actions {
+    align-items: stretch;
+    min-width: 0;
+  }
 }

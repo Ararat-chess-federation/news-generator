@@ -1,17 +1,138 @@
-.nav_list {
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+}
+
+.inner {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0 32px;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 10px 16px;
 }
 
-.nav_item{
-    list-style-type: none;
-    padding: 8px;
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  min-width: 0;
 }
 
-@media (max-width: 769px) {
-  .nav_list {
-    display: block;
+.brand:hover {
+  text-decoration: none;
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.brand_text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  min-width: 0;
+}
+
+.brand_text strong {
+  font-size: 16px;
+}
+
+.brand_text span {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.nav {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav_link {
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+
+.nav_link:hover {
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.nav_link_active,
+.nav_link_active:hover {
+  background: #fff;
+  color: var(--color-primary);
+}
+
+.short_title {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .full_title {
+    display: none;
+  }
+
+  .short_title {
+    display: inline;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+  .brand_text span {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .logo {
+    width: 34px;
+    height: 34px;
+    font-size: 20px;
+  }
+
+  .brand_text strong {
+    font-size: 15px;
+  }
+
+  .brand_text span {
+    font-size: 12px;
+  }
+
+  .nav_link {
+    flex: 1 1 auto;
+    padding: 8px 6px;
+    font-size: 13px;
+    text-align: center;
   }
 }

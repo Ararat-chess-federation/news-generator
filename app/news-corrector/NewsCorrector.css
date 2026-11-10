@@ -1,28 +1,55 @@
-.corrector-layout {
+.corrector_layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 20px;
+}
+
+.corrector_header {
   display: flex;
-  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.corrector_header .card_title {
+  margin-bottom: 0;
+}
+
+.corrector_header .btn {
+  width: auto;
+}
+
+.corrector_layout textarea {
+  min-height: 360px;
+}
+
+.corrector_layout .copy_box {
+  margin-top: 0;
+}
+
+.corrector_empty {
+  display: grid;
+  place-items: center;
+  min-height: 200px;
   padding: 16px;
-  align-items: flex-start;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-small);
+  color: var(--color-muted);
+  text-align: center;
 }
 
-.corrector-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+@media (max-width: 860px) {
+  .corrector_layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-.corrector-section label {
-  font-weight: bold;
-}
+  .corrector_layout textarea {
+    min-height: 220px;
+  }
 
-.corrector-section textarea {
-  width: 100%;
-  padding: 8px;
-  font-size: 18px;
-  font-family: inherit;
-  resize: vertical;
-  border: 1px solid black;
-  border-radius: 4px;
-  line-height: 1.5;
+  .corrector_empty {
+    min-height: 96px;
+  }
 }

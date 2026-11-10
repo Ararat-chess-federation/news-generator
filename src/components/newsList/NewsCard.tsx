@@ -14,9 +14,8 @@ interface INewsCardProps {
 export default function NewsCard({ item, onUpdate }: INewsCardProps) {
   const isPosted = item.status === "draft" || item.status === "published";
 
-
   return (
-    <article className={`news_card news_card--${item.status}`}>
+    <article className={`card news_card news_card--${item.status}`}>
       <header className="news_card_header">
         <div className="news_card_titles">
           {item.tournaments.map(({ title, link }) => (
@@ -43,7 +42,7 @@ export default function NewsCard({ item, onUpdate }: INewsCardProps) {
 
       {isPosted ? (
         <details>
-          <summary>Տեքստը</summary>
+          <summary>Ցույց տալ տեքստը</summary>
           <TextForCopy text={item.text} />
         </details>
       ) : (
