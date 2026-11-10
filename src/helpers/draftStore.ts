@@ -10,15 +10,26 @@ export interface ISavedDraft {
 
 const MAX_AGE_DAYS = 120;
 
+function migrateKey(key: INewsKey & { surnames?: string[] }): INewsKey {
+    return {
+        type: key.type ?? "result",
+        place: key.place,
+        category: key.category,
+        terms: key.terms ?? key.surnames ?? [],
+    };
+}
+
 function storePath() {
-    return process.env.FB_DRAFTS_FILE || path.join(process.cwd(), "data", "facebook-drafts.json");
+    return path.join(process.cwd(), "data", "facebook-drafts.json");
 }
 
 export async function readSavedDrafts(): Promise<ISavedDraft[]> {
     try {
         const drafts: ISavedDraft[] = JSON.parse(await readFile(storePath(), "utf8"));
         const minDate = Date.now() - MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
-        return drafts.filter((draft) => new Date(draft.createdAt).getTime() > minDate);
+        return drafts
+            .filter((draft) => new Date(draft.createdAt).getTime() > minDate)
+            .map((draft) => ({ ...draft, key: migrateKey(draft.key) }));
     } catch {
         return [];
     }

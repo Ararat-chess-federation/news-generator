@@ -1,0 +1,73 @@
+.status_badge {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.status_badge--new {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.status_badge--draft {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status_badge--published {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.fb_save {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fb_save_meta {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  color: #4b5563;
+}
+
+.fb_save_meta * {
+  font-size: 16px;
+}
+
+.fb_save_actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.fb_save_actions button {
+  border: none;
+  background: #1877f2;
+  color: #fff;
+}
+
+.fb_save_actions button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.fb_save_error {
+  color: #b91c1c;
+}
+
+.fb_save_image {
+  width: 160px;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}

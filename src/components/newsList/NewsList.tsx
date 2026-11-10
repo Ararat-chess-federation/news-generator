@@ -9,10 +9,9 @@ interface INewsListProps {
   items: INewsItem[];
   facebookConfigured: boolean;
   checkError?: string;
-  pageId: string;
 }
 
-export default function NewsList({ items: initialItems, facebookConfigured, checkError, pageId }: INewsListProps) {
+export default function NewsList({ items: initialItems, facebookConfigured, checkError }: INewsListProps) {
   const [items, setItems] = useState(initialItems);
 
   const updateItem = (id: string, changes: Partial<INewsItem>) => {
@@ -38,7 +37,6 @@ export default function NewsList({ items: initialItems, facebookConfigured, chec
           <NewsCard
             key={item.id}
             item={item}
-            pageId={pageId}
             onUpdate={(changes) => updateItem(item.id, changes)}
           />
         ))}

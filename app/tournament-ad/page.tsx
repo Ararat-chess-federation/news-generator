@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { checkAdStatus, saveAdDraft } from "../actions";
 import AdText from "../../src/components/adText/AdText";
+import FacebookSave from "../../src/components/facebookSave/FacebookSave";
+import { AD_IMAGES } from "../../src/constants/adImages";
+import StatusBadge from "../../src/components/facebookSave/StatusBadge";
 import Select from "../../src/components/select/Select";
 import {
   days,
@@ -11,6 +15,8 @@ import {
   getDaysInMonth,
   getNextMonth,
 } from "../../src/constants/selectOptions";
+import type { IAdParams } from "../../src/models/ad";
+import type { IFacebookStatus } from "../../src/models/facebook";
 import "./TournamentAd.css";
 
 const ROUNDS = 9
@@ -59,6 +65,35 @@ function TournamentAd() {
     return calculateDeadline(months[today.getMonth()], today.getDate()).deadlineDay;
   });
   const [phoneNumber, setPhoneNumber] = useState(() => PLACE_PHONE_MAP[places[0]] ?? "");
+  const [facebookStatus, setFacebookStatus] = useState<IFacebookStatus | null>(null);
+
+  const ad: IAdParams = {
+    place: selectedPlace,
+    tournament: selectedTournament,
+    days: selectedDays.slice(0, roundsCount),
+    months: selectedMonths.slice(0, roundsCount),
+    times: selectedTimes.slice(0, roundsCount),
+    deadlineMonth: deadLineMonth,
+    deadlineDay: deadLineDay,
+    phone: phoneNumber,
+  };
+  const adJson = JSON.stringify(ad);
+
+  useEffect(() => {
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      const status = await checkAdStatus(JSON.parse(adJson));
+      if (!cancelled) {
+        setFacebookStatus(status);
+      }
+    }, 600);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [adJson]);
+
 
   const handleDeadlineMonthChange = (value: string) => {
     setDeadLineMonth(value);
@@ -309,6 +344,35 @@ function TournamentAd() {
         deadLineDay={deadLineDay}
         phoneNumber={phoneNumber}
       />
+
+      {facebookStatus?.configured && (
+        <section className="ad_facebook">
+          <div className="ad_facebook_header">
+            <h3>Facebook</h3>
+            <StatusBadge status={facebookStatus.status} />
+          </div>
+          {facebookStatus.error && (
+            <p className="fb_save_error">Չհաջողվեց ստուգել Facebook էջը՝ {facebookStatus.error}</p>
+          )}
+          {facebookStatus.status === "unknown" && !facebookStatus.error && (
+            <p className="fb_save_error">Ստուգեք հայտարարության տվյալները (օր․՝ հեռախոսահամարը)</p>
+          )}
+          <FacebookSave
+            status={facebookStatus.status}
+            postUrl={facebookStatus.postUrl}
+            postedAt={facebookStatus.postedAt}
+            onSave={() => saveAdDraft(ad)}
+            defaultImage={AD_IMAGES[selectedTournament]}
+            onSaved={(result) => setFacebookStatus({
+              configured: true,
+              status: result.status === "created" ? "draft" : "published",
+              postId: result.postId,
+              postUrl: result.postUrl,
+              postedAt: result.postedAt,
+            })}
+          />
+        </section>
+      )}
     </div>
   );
 }

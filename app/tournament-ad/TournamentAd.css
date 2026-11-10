@@ -33,6 +33,20 @@
 }
 
 
+.ad_facebook {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #d1d5db;
+  border-left: 6px solid #1877f2;
+  border-radius: 8px;
+}
+
+.ad_facebook_header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 @media screen and (max-width: 426px) {
   .deadline_container {
     gap: 10px
