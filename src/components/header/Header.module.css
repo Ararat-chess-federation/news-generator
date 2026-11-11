@@ -8,16 +8,23 @@
 }
 
 .inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-areas: "brand nav logout";
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  gap: 16px;
   max-width: var(--container);
   margin: 0 auto;
   padding: 10px 16px;
 }
 
+.inner_login {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "brand";
+}
+
 .brand {
+  grid-area: brand;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -58,6 +65,7 @@
 }
 
 .nav {
+  grid-area: nav;
   display: flex;
   gap: 4px;
   padding: 4px;
@@ -91,6 +99,29 @@
   display: none;
 }
 
+.logout {
+  grid-area: logout;
+}
+
+.logout_button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.15s;
+}
+
+.logout_button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
 @media (max-width: 900px) {
   .full_title {
     display: none;
@@ -109,10 +140,22 @@
 
 @media (max-width: 640px) {
   .inner {
-    flex-direction: column;
-    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand logout"
+      "nav nav";
     gap: 10px;
     padding: 10px 12px;
+  }
+
+  .inner_login {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "brand";
+  }
+
+  .logout_button {
+    height: 34px;
+    padding: 0 10px;
   }
 
   .logo {
@@ -127,6 +170,10 @@
 
   .brand_text span {
     font-size: 12px;
+  }
+
+  .nav {
+    display: flex;
   }
 
   .nav_link {
