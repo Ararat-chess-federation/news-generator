@@ -13,11 +13,13 @@ import {
   toFacebookStatus,
 } from "../src/helpers/facebook";
 import { generateCombinedText, generateTournamentText } from "../src/helpers/generateNewsText";
+import { isAuthenticated } from "../src/helpers/session";
 import type { IAdParams } from "../src/models/ad";
 import type { IFacebookStatus, INewsKey, ISaveDraftResult } from "../src/models/facebook";
 import type { ITournament } from "../src/models/tournament";
 
 const NOT_CONFIGURED = "Facebook-ը կարգավորված չէ (FB_PAGE_ID, FB_PAGE_ACCESS_TOKEN)";
+const UNAUTHORIZED = "Սեսիան ավարտվել է, թարմացրեք էջը և մուտք գործեք կրկին";
 
 async function saveDraft(text: string, key: INewsKey, images: File[] = []): Promise<ISaveDraftResult> {
   const existing = await findExistingPost(key, await getRecentPosts());
@@ -42,6 +44,10 @@ function toErrorResult(error: unknown): ISaveDraftResult {
 }
 
 export async function saveFacebookDraft(links: string[]): Promise<ISaveDraftResult> {
+  if (!(await isAuthenticated())) {
+    return { status: "error", message: UNAUTHORIZED };
+  }
+
   if (!isFacebookConfigured()) {
     return { status: "error", message: NOT_CONFIGURED };
   }
@@ -73,6 +79,10 @@ export async function saveFacebookDraft(links: string[]): Promise<ISaveDraftResu
 }
 
 export async function saveAdDraft(ad: IAdParams): Promise<ISaveDraftResult> {
+  if (!(await isAuthenticated())) {
+    return { status: "error", message: UNAUTHORIZED };
+  }
+
   if (!isFacebookConfigured()) {
     return { status: "error", message: NOT_CONFIGURED };
   }
@@ -90,6 +100,10 @@ export async function saveAdDraft(ad: IAdParams): Promise<ISaveDraftResult> {
 }
 
 export async function checkAdStatus(ad: IAdParams): Promise<IFacebookStatus> {
+  if (!(await isAuthenticated())) {
+    return { configured: true, status: "unknown", error: UNAUTHORIZED };
+  }
+
   if (!isFacebookConfigured()) {
     return { configured: false, status: "unknown" };
   }
