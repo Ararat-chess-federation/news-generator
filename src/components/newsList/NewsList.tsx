@@ -9,10 +9,9 @@ interface INewsListProps {
   items: INewsItem[];
   facebookConfigured: boolean;
   checkError?: string;
-  pageId: string;
 }
 
-export default function NewsList({ items: initialItems, facebookConfigured, checkError, pageId }: INewsListProps) {
+export default function NewsList({ items: initialItems, facebookConfigured, checkError }: INewsListProps) {
   const [items, setItems] = useState(initialItems);
 
   const updateItem = (id: string, changes: Partial<INewsItem>) => {
@@ -20,7 +19,12 @@ export default function NewsList({ items: initialItems, facebookConfigured, chec
   };
 
   if (!items.length) {
-    return <p className="news_empty">Ավարտված մրցաշարեր չկան</p>;
+    return (
+      <p className="news_empty">
+        <span className="news_empty_icon" aria-hidden>♟</span>
+        Ավարտված մրցաշարեր այս պահին չկան
+      </p>
+    );
   }
 
   return (
@@ -38,7 +42,6 @@ export default function NewsList({ items: initialItems, facebookConfigured, chec
           <NewsCard
             key={item.id}
             item={item}
-            pageId={pageId}
             onUpdate={(changes) => updateItem(item.id, changes)}
           />
         ))}

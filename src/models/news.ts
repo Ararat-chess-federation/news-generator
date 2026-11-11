@@ -6,5 +6,6 @@ export interface INewsItem {
     text: string;
     status: NewsStatus;
     postId?: string;
+    postUrl?: string;
     postedAt?: string;
 }

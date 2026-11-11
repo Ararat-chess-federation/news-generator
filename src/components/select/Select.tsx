@@ -1,10 +1,12 @@
-import type { ChangeEvent, Dispatch } from "react";
+import { useId, type ChangeEvent, type Dispatch } from "react";
 
 interface ISelectProps {
   values: string[];
   selectedOption: string;
   setSelectedOption: Dispatch<React.SetStateAction<string>> | Function;
   title: string;
+  hideLabel?: boolean;
+  className?: string;
 }
 
 const Select = ({
@@ -12,24 +14,23 @@ const Select = ({
   selectedOption,
   setSelectedOption,
   title,
+  hideLabel,
+  className = "",
 }: ISelectProps) => {
+  const id = useId();
+
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setSelectedOption(value);
+    setSelectedOption(e.target.value);
   };
 
   return (
-    <div style={{ marginTop: "16px" }}>
-      <div>
-        <label>{title}</label>
-      </div>
-      <select
-        id={`${title}-select`}
-        value={selectedOption}
-        onChange={handleSelectChange}
-      >
-        {values.map((el, index) => (
-          <option key={index} value={el} title={el}>
+    <div className={`field ${className}`}>
+      <label htmlFor={id} className={hideLabel ? "visually_hidden" : "field_label"}>
+        {title}
+      </label>
+      <select id={id} value={selectedOption} onChange={handleSelectChange}>
+        {values.map((el) => (
+          <option key={el} value={el} title={el}>
             {el.split(" ").slice(0, 3).join(" ")}
           </option>
         ))}

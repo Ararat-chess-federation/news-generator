@@ -1,4 +1,5 @@
-import type { IFacebookPost, INewsKey } from "../models/facebook";
+import type { IFacebookPost, IFacebookStatus, INewsKey } from "../models/facebook";
+import type { NewsStatus } from "../models/news";
 import type { ITournament } from "../models/tournament";
 import { addSavedDraft, readSavedDrafts, removeSavedDrafts } from "./draftStore";
 import { parseTournamentTitle } from "./parseTournamentTitle";
@@ -52,16 +53,28 @@ export async function getRecentPosts(): Promise<IFacebookPost[]> {
     return data ?? [];
 }
 
-function postToFeed(params: Record<string, string>) {
-    return graphRequest<{ id: string }>("/feed", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(params),
-    });
+async function uploadPhoto(image: File): Promise<string> {
+    const body = new FormData();
+    body.append("source", image, image.name);
+    body.append("published", "false");
+    body.append("temporary", "true");
+
+    const { id } = await graphRequest<{ id: string }>("/photos", { method: "POST", body });
+    return id;
 }
 
-export async function createDraftPost(message: string, key: INewsKey): Promise<string> {
-    const { id } = await postToFeed({ message, published: "false", unpublished_content_type: "DRAFT" });
+export async function createDraftPost(message: string, key: INewsKey, images: File[] = []): Promise<string> {
+    const photoIds = await Promise.all(images.map(uploadPhoto));
+    const params = new URLSearchParams({ message, published: "false", unpublished_content_type: "DRAFT" });
+    photoIds.forEach((photoId, index) => {
+        params.append(`attached_media[${index}]`, JSON.stringify({ media_fbid: photoId }));
+    });
+
+    const { id } = await graphRequest<{ id: string }>("/feed", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params,
+    });
     await addSavedDraft(id, key);
     return id;
 }
@@ -77,47 +90,52 @@ async function getPost(id: string): Promise<IFacebookPost | undefined> {
     }
 }
 
-function normalize(text: string) {
+export function normalize(text: string) {
     return text.replace(/\s+/g, " ").trim().toLowerCase();
+}
+
+export function extractCategory(text: string) {
+    return normalize(text.match(/\d+-(?:րդ|ին) կարգ/)?.[0] ?? "");
 }
 
 export function getNewsKey(tournaments: ITournament[]): INewsKey {
     const { tournament, place = "" } = parseTournamentTitle(tournaments[0].title);
-    const category = tournament.match(/\d+-(?:րդ|ին) կարգ/)?.[0] ?? "";
     const surnames = tournaments
         .flatMap(({ prizes }) => [prizes?.first, prizes?.second, prizes?.third])
         .map((prizer) => prizer?.player?.replace(/,/g, " ").trim().split(/\s+/)[0] ?? "")
         .filter((surname) => surname.length > 2);
 
     return {
+        type: "result",
         place: normalize(place).split(" ").pop() ?? "",
-        category: normalize(category),
-        surnames: [...new Set(surnames.map(normalize))],
+        category: extractCategory(tournament),
+        terms: [...new Set(surnames.map(normalize))],
     };
 }
 
 export function findDuplicatePost(key: INewsKey, posts: IFacebookPost[]): IFacebookPost | undefined {
-    if (!key.place || !key.surnames.length) {
+    if (!key.place || !key.terms.length) {
         return undefined;
     }
 
-    const requiredSurnames = Math.min(2, key.surnames.length);
+    const requiredTerms = key.type === "ad" ? key.terms.length : Math.min(2, key.terms.length);
 
     return posts.find((post) => {
         const message = normalize(post.message ?? "");
-        const foundSurnames = key.surnames.filter((surname) => message.includes(surname)).length;
+        const foundTerms = key.terms.filter((term) => message.includes(term)).length;
 
         return message.includes(key.place)
             && (!key.category || message.includes(key.category))
-            && foundSurnames >= requiredSurnames;
+            && foundTerms >= requiredTerms;
     });
 }
 
 function isSameNews(a: INewsKey, b: INewsKey) {
-    return a.place === b.place
+    return a.type === b.type
+        && a.place === b.place
         && a.category === b.category
-        && a.surnames.length === b.surnames.length
-        && a.surnames.every((surname) => b.surnames.includes(surname));
+        && a.terms.length === b.terms.length
+        && a.terms.every((term) => b.terms.includes(term));
 }
 
 export async function findExistingPost(key: INewsKey, posts: IFacebookPost[]): Promise<IFacebookPost | undefined> {
@@ -141,4 +159,30 @@ export async function findExistingPost(key: INewsKey, posts: IFacebookPost[]): P
     await removeSavedDrafts(deletedIds);
 
     return existing;
+}
+
+export function formatPostDate(date: string | Date) {
+    return new Date(date).toLocaleDateString("hy-AM", { day: "numeric", month: "long", year: "numeric" });
+}
+
+export function getPostUrl(status: NewsStatus, postId?: string) {
+    if (status === "published" && postId) {
+        return `https://www.facebook.com/${postId}`;
+    }
+    if (status === "draft") {
+        return `https://business.facebook.com/latest/posts?asset_id=${process.env.FB_PAGE_ID}`;
+    }
+    return undefined;
+}
+
+export function toFacebookStatus(existing: IFacebookPost | undefined): IFacebookStatus {
+    const status: NewsStatus = existing ? (existing.is_published === false ? "draft" : "published") : "new";
+
+    return {
+        configured: true,
+        status,
+        postId: existing?.id,
+        postUrl: getPostUrl(status, existing?.id),
+        postedAt: existing?.created_time ? formatPostDate(existing.created_time) : undefined,
+    };
 }

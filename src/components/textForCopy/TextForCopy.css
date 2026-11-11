@@ -1,11 +1,52 @@
-.final_container {
-  margin-top: 16px;
-  border: 1px solid black;
-  padding: 8px;
-  white-space: pre-wrap;
+.copy_box {
+  margin-top: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: var(--color-surface-muted);
+  overflow: hidden;
 }
 
-.copy_button {
-  margin: 24px;
-  float: right
+.copy_box_toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 6px 6px 14px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.copy_box_label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.copy_box_button {
+  width: auto;
+}
+
+.copy_box_button--copied {
+  border-color: #86efac;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.copy_box_text {
+  padding: 14px;
+  font-size: 15px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .copy_box_button {
+    width: auto;
+  }
+
+  .copy_box_text {
+    padding: 12px;
+    font-size: 14px;
+  }
 }

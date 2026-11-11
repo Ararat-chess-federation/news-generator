@@ -1,57 +1,21 @@
 "use client";
 
-import { useState, useTransition } from "react";
 import { saveFacebookDraft } from "../../../app/actions";
-import type { INewsItem, NewsStatus } from "../../models/news";
+import type { INewsItem } from "../../models/news";
+import FacebookSave from "../facebookSave/FacebookSave";
+import StatusBadge from "../facebookSave/StatusBadge";
 import TextForCopy from "../textForCopy/TextForCopy";
 
 interface INewsCardProps {
   item: INewsItem;
-  pageId: string;
   onUpdate: (changes: Partial<INewsItem>) => void;
 }
 
-const STATUS_LABELS: Record<NewsStatus, string> = {
-  new: "🆕 Նոր",
-  draft: "📝 Սևագիր",
-  published: "✅ Հրապարակված",
-  unknown: "Կարգավիճակն անհայտ է",
-};
-
-function getPostUrl(item: INewsItem, pageId: string) {
-  if (item.status === "published" && item.postId) {
-    return { url: `https://www.facebook.com/${item.postId}`, label: "Բացել Facebook-ում" };
-  }
-  if (item.status === "draft") {
-    return { url: `https://business.facebook.com/latest/posts?asset_id=${pageId}`, label: "Բացել Business Suite-ում" };
-  }
-  return undefined;
-}
-
-export default function NewsCard({ item, pageId, onUpdate }: INewsCardProps) {
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState("");
+export default function NewsCard({ item, onUpdate }: INewsCardProps) {
   const isPosted = item.status === "draft" || item.status === "published";
-  const postUrl = getPostUrl(item, pageId);
-
-  const handleSave = () => {
-    setError("");
-    startTransition(async () => {
-      const result = await saveFacebookDraft(item.tournaments.map(({ link }) => link));
-      if (result.status === "error") {
-        setError(result.message);
-        return;
-      }
-      onUpdate({
-        status: result.status === "created" ? "draft" : "published",
-        postId: result.postId,
-        postedAt: result.status === "created" ? new Date().toLocaleDateString("hy-AM") : undefined,
-      });
-    });
-  };
 
   return (
-    <article className={`news_card news_card--${item.status}`}>
+    <article className={`card news_card news_card--${item.status}`}>
       <header className="news_card_header">
         <div className="news_card_titles">
           {item.tournaments.map(({ title, link }) => (
@@ -60,32 +24,25 @@ export default function NewsCard({ item, pageId, onUpdate }: INewsCardProps) {
             </a>
           ))}
         </div>
-        <span className={`status_badge status_badge--${item.status}`}>{STATUS_LABELS[item.status]}</span>
+        <StatusBadge status={item.status} />
       </header>
 
-      {isPosted && (
-        <p className="news_card_meta">
-          {item.postedAt && <span>{item.postedAt}</span>}
-          {postUrl && (
-            <a href={postUrl.url} target="_blank" rel="noopener noreferrer">
-              {postUrl.label} ↗
-            </a>
-          )}
-        </p>
-      )}
-
-      {item.status === "new" && (
-        <div className="news_card_actions">
-          <button onClick={handleSave} disabled={isPending}>
-            {isPending ? "Պահպանվում է..." : "Պահպանել որպես Facebook սևագիր"}
-          </button>
-          {error && <span className="news_card_error">{error}</span>}
-        </div>
-      )}
+      <FacebookSave
+        status={item.status}
+        postUrl={item.postUrl}
+        postedAt={item.postedAt}
+        onSave={() => saveFacebookDraft(item.tournaments.map(({ link }) => link))}
+        onSaved={(result) => onUpdate({
+          status: result.status === "created" ? "draft" : "published",
+          postId: result.postId,
+          postUrl: result.postUrl,
+          postedAt: result.postedAt,
+        })}
+      />
 
       {isPosted ? (
         <details>
-          <summary>Տեքստը</summary>
+          <summary>Ցույց տալ տեքստը</summary>
           <TextForCopy text={item.text} />
         </details>
       ) : (

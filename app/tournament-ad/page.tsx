@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { checkAdStatus, saveAdDraft } from "../actions";
 import AdText from "../../src/components/adText/AdText";
+import FacebookSave from "../../src/components/facebookSave/FacebookSave";
+import { AD_IMAGES } from "../../src/constants/adImages";
+import StatusBadge from "../../src/components/facebookSave/StatusBadge";
 import Select from "../../src/components/select/Select";
 import {
   days,
@@ -11,6 +15,8 @@ import {
   getDaysInMonth,
   getNextMonth,
 } from "../../src/constants/selectOptions";
+import type { IAdParams } from "../../src/models/ad";
+import type { IFacebookStatus } from "../../src/models/facebook";
 import "./TournamentAd.css";
 
 const ROUNDS = 9
@@ -59,6 +65,34 @@ function TournamentAd() {
     return calculateDeadline(months[today.getMonth()], today.getDate()).deadlineDay;
   });
   const [phoneNumber, setPhoneNumber] = useState(() => PLACE_PHONE_MAP[places[0]] ?? "");
+  const [facebookStatus, setFacebookStatus] = useState<IFacebookStatus | null>(null);
+
+  const ad: IAdParams = {
+    place: selectedPlace,
+    tournament: selectedTournament,
+    days: selectedDays.slice(0, roundsCount),
+    months: selectedMonths.slice(0, roundsCount),
+    times: selectedTimes.slice(0, roundsCount),
+    deadlineMonth: deadLineMonth,
+    deadlineDay: deadLineDay,
+    phone: phoneNumber,
+  };
+  const adJson = JSON.stringify(ad);
+
+  useEffect(() => {
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      const status = await checkAdStatus(JSON.parse(adJson));
+      if (!cancelled) {
+        setFacebookStatus(status);
+      }
+    }, 600);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [adJson]);
 
   const handleDeadlineMonthChange = (value: string) => {
     setDeadLineMonth(value);
@@ -213,103 +247,151 @@ function TournamentAd() {
   };
 
   return (
-    <div className="container">
-      <h2>Վայր</h2>
-      <section className="ad_intro">
-        <div>
-          <Select
-            selectedOption={selectedPlace}
-            setSelectedOption={setSelectedPlace}
-            values={places}
-            title="Վայր"
-          />
-        </div>
-        <div>
-          <Select
-            selectedOption={selectedTournament}
-            setSelectedOption={setSelectedTournament}
-            values={tournaments}
-            title="Մրցաշար"
-          />
-        </div>
-        <div>
-          <Select
-            selectedOption={String(roundsCount)}
-            setSelectedOption={(value: string) => setRoundsCount(parseInt(value))}
-            values={["6", "7", "8", "9", "10", "11"]}
-            title="Տուրերի քանակ"
-          />
-        </div>
-      </section>
-      <h2>Տուրեր</h2>
-      <div className="schedule_container">
-        {[...Array(roundsCount)].map((_, i) => (
-          <div key={i}>
-            <p>Տուր {i + 1}</p>
-            <div className="round_container">
+    <main className="container">
+      <header className="page_header">
+        <h1>Մրցաշարի հայտարարություն</h1>
+        <p>Լրացրեք տվյալները, և հայտարարության տեքստը կստեղծվի ավտոմատ</p>
+      </header>
+
+      <div className="ad_layout">
+        <div className="ad_form">
+          <section className="card">
+            <h2 className="card_title">Մրցաշար</h2>
+            <div className="field_grid">
               <Select
-                selectedOption={selectedMonths[i]}
-                setSelectedOption={(value: string) =>
-                  handleMonthChange(i, value)
-                }
+                className="field--wide"
+                selectedOption={selectedPlace}
+                setSelectedOption={setSelectedPlace}
+                values={places}
+                title="Վայր"
+              />
+              <Select
+                selectedOption={selectedTournament}
+                setSelectedOption={setSelectedTournament}
+                values={tournaments}
+                title="Կարգ"
+              />
+              <Select
+                selectedOption={String(roundsCount)}
+                setSelectedOption={(value: string) => setRoundsCount(parseInt(value))}
+                values={["6", "7", "8", "9", "10", "11"]}
+                title="Տուրերի քանակ"
+              />
+            </div>
+          </section>
+
+          <section className="card">
+            <h2 className="card_title">Ժամանակացույց</h2>
+            <div className="rounds">
+              <div className="round round--head" aria-hidden>
+                <span>Տուր</span>
+                <span>Ամիս</span>
+                <span>Օր</span>
+                <span>Ժամ</span>
+              </div>
+              {[...Array(roundsCount)].map((_, i) => (
+                <div key={i} className="round">
+                  <span className="round_number">{i + 1}</span>
+                  <Select
+                    hideLabel
+                    selectedOption={selectedMonths[i]}
+                    setSelectedOption={(value: string) => handleMonthChange(i, value)}
+                    values={months}
+                    title={`Տուր ${i + 1}, ամիս`}
+                  />
+                  <Select
+                    hideLabel
+                    selectedOption={selectedDays[i]}
+                    setSelectedOption={(value: string) => handleDayChange(i, value)}
+                    values={days.slice(0, getDaysInMonth(selectedMonths[i]))}
+                    title={`Տուր ${i + 1}, օր`}
+                  />
+                  <input
+                    type="time"
+                    aria-label={`Տուր ${i + 1}, ժամ`}
+                    value={selectedTimes[i] || "15:00"}
+                    onChange={(e) => handleTimeChange(i, e.target.value)}
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="card">
+            <h2 className="card_title">Գրանցման վերջնաժամկետ</h2>
+            <div className="field_grid">
+              <Select
+                selectedOption={deadLineMonth}
+                setSelectedOption={handleDeadlineMonthChange}
                 values={months}
                 title="Ամիս"
               />
               <Select
-                selectedOption={selectedDays[i]}
-                setSelectedOption={(value: string) => handleDayChange(i, value)}
-                values={days.slice(0, getDaysInMonth(selectedMonths[i]))}
+                selectedOption={deadLineDay}
+                setSelectedOption={(value: string) => setDeadLineDay(value)}
+                values={days.slice(0, getDaysInMonth(deadLineMonth))}
                 title="Օր"
               />
-              <div style={{ marginTop: "16px" }}>
-                <div>Ժամ</div>
+              <div className="field field--wide">
+                <label htmlFor="phone-number" className="field_label">Հեռախոսահամար</label>
                 <input
-                  type="time"
-                  value={selectedTimes[i] || "15:00"}
-                  onChange={(e) => handleTimeChange(i, e.target.value)}
+                  id="phone-number"
+                  type="tel"
+                  inputMode="tel"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                 />
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-      <h2>Գրանցման Վերջնաժամկետ</h2>
-      <div className="deadline_container">
-        <Select
-          selectedOption={deadLineMonth}
-          setSelectedOption={handleDeadlineMonthChange}
-          values={months}
-          title="Ամիս"
-        />
-        <Select
-          selectedOption={deadLineDay}
-          setSelectedOption={(value: string) => setDeadLineDay(value)}
-          values={days.slice(0, getDaysInMonth(deadLineMonth))}
-          title="Օր"
-        />
-        <div>
-          <div style={{ marginTop: "16px" }}>
-            <label>Հեռախոսահամար</label>
-          </div>
-          <input
-            type="text"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-          />
+          </section>
         </div>
-      </div>
 
-      <AdText
-        selectedPlace={selectedPlace}
-        selectedTournament={selectedTournament}
-        selectedMonths={selectedMonths.slice(0, roundsCount)}
-        selectedDays={selectedDays.slice(0, roundsCount)}
-        selectedTimes={selectedTimes.slice(0, roundsCount)}
-        deadLineMonth={deadLineMonth}
-        deadLineDay={deadLineDay}
-        phoneNumber={phoneNumber}
-      />
-    </div>
+        <aside className="ad_preview">
+          <section className="card">
+            <h2 className="card_title">Հայտարարության տեքստ</h2>
+            <AdText
+              selectedPlace={selectedPlace}
+              selectedTournament={selectedTournament}
+              selectedMonths={selectedMonths.slice(0, roundsCount)}
+              selectedDays={selectedDays.slice(0, roundsCount)}
+              selectedTimes={selectedTimes.slice(0, roundsCount)}
+              deadLineMonth={deadLineMonth}
+              deadLineDay={deadLineDay}
+              phoneNumber={phoneNumber}
+            />
+          </section>
+
+          {facebookStatus?.configured && (
+            <section className="card ad_facebook">
+              <div className="ad_facebook_header">
+                <h2 className="card_title">Facebook</h2>
+                <StatusBadge status={facebookStatus.status} />
+              </div>
+              {facebookStatus.error && (
+                <p className="fb_save_error">Չհաջողվեց ստուգել Facebook էջը՝ {facebookStatus.error}</p>
+              )}
+              {facebookStatus.status === "unknown" && !facebookStatus.error && (
+                <p className="fb_save_error">Ստուգեք հայտարարության տվյալները (օր․՝ հեռախոսահամարը)</p>
+              )}
+              <FacebookSave
+                status={facebookStatus.status}
+                postUrl={facebookStatus.postUrl}
+                postedAt={facebookStatus.postedAt}
+                onSave={() => saveAdDraft(ad)}
+                defaultImage={AD_IMAGES[selectedTournament]}
+                onSaved={(result) => setFacebookStatus({
+                  configured: true,
+                  status: result.status === "created" ? "draft" : "published",
+                  postId: result.postId,
+                  postUrl: result.postUrl,
+                  postedAt: result.postedAt,
+                })}
+              />
+            </section>
+          )}
+        </aside>
+      </div>
+    </main>
   );
 }
 
