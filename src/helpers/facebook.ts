@@ -170,7 +170,7 @@ export function getPostUrl(status: NewsStatus, postId?: string) {
         return `https://www.facebook.com/${postId}`;
     }
     if (status === "draft") {
-        return `https://business.facebook.com/latest/posts?asset_id=${process.env.FB_PAGE_ID}`;
+        return `https://business.facebook.com/latest/posts/draft_posts?asset_id=${process.env.FB_PAGE_ID}`;
     }
     return undefined;
 }
