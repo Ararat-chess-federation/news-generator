@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
+import { SESSION_HINT_COOKIE } from "../../constants/session";
 import type { ISaveDraftResult } from "../../models/facebook";
 import type { NewsStatus } from "../../models/news";
 import LoginPrompt from "./LoginPrompt";
@@ -16,25 +17,62 @@ interface IFacebookSaveProps {
   onSaved: (result: ISaveDraftResult) => void;
 }
 
+function hasSession() {
+  return document.cookie.split("; ").includes(`${SESSION_HINT_COOKIE}=1`);
+}
+
+function openPendingTab() {
+  const tab = window.open("", "_blank");
+  if (tab) {
+    tab.opener = null;
+    tab.document.title = "Facebook";
+    tab.document.body.textContent = "Պահպանվում է...";
+  }
+  return tab;
+}
+
 export default function FacebookSave({ status, postUrl, postedAt, onSave, onSaved }: IFacebookSaveProps) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
   const [needsLogin, setNeedsLogin] = useState(false);
+  const tabRef = useRef<Window | null>(null);
 
-  const handleSave = () => {
+  const closeTab = () => {
+    tabRef.current?.close();
+    tabRef.current = null;
+  };
+
+  const save = () => {
     setError("");
     startTransition(async () => {
       const result = await onSave();
       if (result.status === "unauthorized") {
+        closeTab();
         setNeedsLogin(true);
         return;
       }
       if (result.status === "error") {
+        closeTab();
         setError(result.message);
         return;
       }
+      if (tabRef.current && result.postUrl) {
+        tabRef.current.location.href = result.postUrl;
+        tabRef.current = null;
+      } else {
+        closeTab();
+      }
       onSaved(result);
     });
+  };
+
+  const handleSave = () => {
+    if (!hasSession()) {
+      setNeedsLogin(true);
+      return;
+    }
+    tabRef.current = openPendingTab();
+    save();
   };
 
   if (status === "draft" || status === "published") {
@@ -62,9 +100,13 @@ export default function FacebookSave({ status, postUrl, postedAt, onSave, onSave
       <div className="fb_save_actions">
         {needsLogin ? (
           <LoginPrompt
+            onStart={() => {
+              tabRef.current = openPendingTab();
+            }}
+            onFailure={closeTab}
             onSuccess={() => {
               setNeedsLogin(false);
-              handleSave();
+              save();
             }}
             onCancel={() => setNeedsLogin(false)}
           />

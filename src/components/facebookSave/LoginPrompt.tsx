@@ -4,11 +4,13 @@ import { useId, useState, useTransition, type FormEvent } from "react";
 import { login } from "../../../app/actions";
 
 interface ILoginPromptProps {
+  onStart: () => void;
+  onFailure: () => void;
   onSuccess: () => void;
   onCancel: () => void;
 }
 
-export default function LoginPrompt({ onSuccess, onCancel }: ILoginPromptProps) {
+export default function LoginPrompt({ onStart, onFailure, onSuccess, onCancel }: ILoginPromptProps) {
   const id = useId();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
@@ -17,9 +19,11 @@ export default function LoginPrompt({ onSuccess, onCancel }: ILoginPromptProps) 
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     setError("");
+    onStart();
     startTransition(async () => {
       const result = await login(String(form.get("username") ?? ""), String(form.get("password") ?? ""));
       if (result.error) {
+        onFailure();
         setError(result.error);
         return;
       }
