@@ -37,15 +37,13 @@
 }
 
 .logo {
-  display: grid;
-  place-items: center;
   flex-shrink: 0;
   width: 40px;
   height: 40px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.15);
-  font-size: 24px;
-  line-height: 1;
+  padding: 5px;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: contain;
 }
 
 .brand_text {
@@ -161,7 +159,7 @@
   .logo {
     width: 34px;
     height: 34px;
-    font-size: 20px;
+    padding: 4px;
   }
 
   .brand_text strong {

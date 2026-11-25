@@ -1,8 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { logout } from "../../../app/login/actions";
+import logo from "../../assets/logo.png";
 import { navigation } from "../../constants/nav";
 import styles from "./Header.module.css";
 
@@ -14,7 +16,7 @@ export default function Header() {
     <header className={styles.header}>
       <div className={`${styles.inner} ${isLoginPage ? styles.inner_login : ""}`}>
         <Link href="/" className={styles.brand}>
-          <span className={styles.logo} aria-hidden>♞</span>
+          <Image src={logo} alt="" className={styles.logo} priority />
           <span className={styles.brand_text}>
             <strong>Նորությունների գեներատոր</strong>
             <span>Արարատի մարզի շախմատի ֆեդերացիա</span>

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import logo from "../../src/assets/logo.png";
 import LoginForm from "./LoginForm";
 import "./Login.css";
 
@@ -16,7 +18,7 @@ export default async function LoginPage({
   return (
     <main className="login_page">
       <section className="card login_card">
-        <span className="login_logo" aria-hidden>♞</span>
+        <Image src={logo} alt="" className="login_logo" priority />
         <h1>Մուտք</h1>
         <p className="login_subtitle">Մուտքագրեք ձեր տվյալները՝ շարունակելու համար</p>
         <LoginForm from={typeof from === "string" ? from : ""} />
