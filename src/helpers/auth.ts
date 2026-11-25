@@ -93,10 +93,3 @@ export async function verifySessionToken(token: string | undefined) {
 
     return safeEqual(signature, await hmac(`${process.env.AUTH_USERNAME}.${expiresAt}`));
 }
-
-export function getSafeRedirect(value: unknown) {
-    const path = typeof value === "string" ? value : "";
-    return path.startsWith("/") && !path.startsWith("//") && !path.startsWith("/\\") && !path.startsWith("/login")
-        ? path
-        : "/";
-}

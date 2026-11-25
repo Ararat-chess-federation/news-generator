@@ -24,7 +24,7 @@ export interface IFacebookStatus {
 }
 
 export interface ISaveDraftResult {
-    status: "created" | "duplicate" | "error";
+    status: "created" | "duplicate" | "unauthorized" | "error";
     message: string;
     postId?: string;
     postUrl?: string;

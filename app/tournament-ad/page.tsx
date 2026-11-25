@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { checkAdStatus, saveAdDraft } from "../actions";
+import AdImage from "../../src/components/adImage/AdImage";
 import AdText from "../../src/components/adText/AdText";
 import FacebookSave from "../../src/components/facebookSave/FacebookSave";
 import { AD_IMAGES } from "../../src/constants/adImages";
@@ -361,6 +362,8 @@ function TournamentAd() {
             />
           </section>
 
+          <AdImage key={AD_IMAGES[selectedTournament]} src={AD_IMAGES[selectedTournament]} />
+
           {facebookStatus?.configured && (
             <section className="card ad_facebook">
               <div className="ad_facebook_header">
@@ -378,7 +381,6 @@ function TournamentAd() {
                 postUrl={facebookStatus.postUrl}
                 postedAt={facebookStatus.postedAt}
                 onSave={() => saveAdDraft(ad)}
-                defaultImage={AD_IMAGES[selectedTournament]}
                 onSaved={(result) => setFacebookStatus({
                   configured: true,
                   status: result.status === "created" ? "draft" : "published",

@@ -56,18 +56,44 @@
   min-width: 220px;
 }
 
+.fb_save_notice {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.login_prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 480px;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: var(--color-surface-muted);
+}
+
+.login_prompt_title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.login_prompt_fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.login_prompt_actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .fb_save_error {
   font-size: 14px;
   color: var(--color-danger);
-}
-
-.fb_save_image {
-  width: 120px;
-  aspect-ratio: 4 / 5;
-  object-fit: contain;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-small);
-  background: #fff;
 }
 
 @media (max-width: 640px) {
@@ -76,12 +102,16 @@
     align-items: stretch;
   }
 
-  .fb_save_image {
-    width: 96px;
-  }
-
   .fb_save_actions {
     align-items: stretch;
     min-width: 0;
+  }
+
+  .login_prompt_fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .login_prompt_actions .btn {
+    flex: 1 1 auto;
   }
 }

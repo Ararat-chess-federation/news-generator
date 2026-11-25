@@ -13,13 +13,29 @@ import {
   toFacebookStatus,
 } from "../src/helpers/facebook";
 import { generateCombinedText, generateTournamentText } from "../src/helpers/generateNewsText";
-import { isAuthenticated } from "../src/helpers/session";
+import { credentialsMatch, isAuthConfigured } from "../src/helpers/auth";
+import { isAuthenticated, startSession } from "../src/helpers/session";
 import type { IAdParams } from "../src/models/ad";
 import type { IFacebookStatus, INewsKey, ISaveDraftResult } from "../src/models/facebook";
 import type { ITournament } from "../src/models/tournament";
 
 const NOT_CONFIGURED = "Facebook-ը կարգավորված չէ (FB_PAGE_ID, FB_PAGE_ACCESS_TOKEN)";
-const UNAUTHORIZED = "Սեսիան ավարտվել է, թարմացրեք էջը և մուտք գործեք կրկին";
+const UNAUTHORIZED = "Մուտք գործեք՝ Facebook-ում պահպանելու համար";
+const FAILED_LOGIN_DELAY = 1000;
+
+export async function login(username: string, password: string): Promise<{ error?: string }> {
+  if (!isAuthConfigured()) {
+    return { error: "Մուտքը կարգավորված չէ (AUTH_USERNAME, AUTH_PASSWORD)" };
+  }
+
+  if (typeof username !== "string" || typeof password !== "string" || !(await credentialsMatch(username.trim(), password))) {
+    await new Promise((resolve) => setTimeout(resolve, FAILED_LOGIN_DELAY));
+    return { error: "Սխալ մուտքանուն կամ գաղտնաբառ" };
+  }
+
+  await startSession();
+  return {};
+}
 
 async function saveDraft(text: string, key: INewsKey, images: File[] = []): Promise<ISaveDraftResult> {
   const existing = await findExistingPost(key, await getRecentPosts());
@@ -45,7 +61,7 @@ function toErrorResult(error: unknown): ISaveDraftResult {
 
 export async function saveFacebookDraft(links: string[]): Promise<ISaveDraftResult> {
   if (!(await isAuthenticated())) {
-    return { status: "error", message: UNAUTHORIZED };
+    return { status: "unauthorized", message: UNAUTHORIZED };
   }
 
   if (!isFacebookConfigured()) {
@@ -80,7 +96,7 @@ export async function saveFacebookDraft(links: string[]): Promise<ISaveDraftResu
 
 export async function saveAdDraft(ad: IAdParams): Promise<ISaveDraftResult> {
   if (!(await isAuthenticated())) {
-    return { status: "error", message: UNAUTHORIZED };
+    return { status: "unauthorized", message: UNAUTHORIZED };
   }
 
   if (!isFacebookConfigured()) {
@@ -100,10 +116,6 @@ export async function saveAdDraft(ad: IAdParams): Promise<ISaveDraftResult> {
 }
 
 export async function checkAdStatus(ad: IAdParams): Promise<IFacebookStatus> {
-  if (!(await isAuthenticated())) {
-    return { configured: true, status: "unknown", error: UNAUTHORIZED };
-  }
-
   if (!isFacebookConfigured()) {
     return { configured: false, status: "unknown" };
   }

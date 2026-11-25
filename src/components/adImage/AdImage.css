@@ -1,0 +1,38 @@
+.ad_image {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ad_image .card_title {
+  margin-bottom: 0;
+}
+
+.ad_image_preview {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: #fff;
+}
+
+.ad_image_download {
+  align-self: flex-start;
+}
+
+.ad_image_download:hover {
+  text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  .ad_image_preview {
+    max-width: none;
+  }
+
+  .ad_image_download {
+    align-self: stretch;
+  }
+}

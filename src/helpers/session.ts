@@ -16,7 +16,3 @@ export async function startSession() {
         maxAge: SESSION_MAX_AGE,
     });
 }
-
-export async function endSession() {
-    (await cookies()).delete(AUTH_COOKIE);
-}
